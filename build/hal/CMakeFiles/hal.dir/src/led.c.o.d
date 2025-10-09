@@ -1,7 +1,7 @@
 hal/CMakeFiles/hal.dir/src/led.c.o: \
  /home/prasanna/Ensc351/work/newbeginning/led/hal/src/led.c \
  /usr/aarch64-linux-gnu/include/stdc-predef.h \
- /home/prasanna/Ensc351/work/newbeginning/led/hal/include/hal/led.h \
+ /home/prasanna/Ensc351/work/newbeginning/led/hal/include/led.h \
  /usr/lib/gcc-cross/aarch64-linux-gnu/14/include/stdbool.h \
  /usr/aarch64-linux-gnu/include/stdio.h \
  /usr/aarch64-linux-gnu/include/bits/libc-header-start.h \

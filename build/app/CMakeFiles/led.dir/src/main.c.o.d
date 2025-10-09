@@ -1,9 +1,9 @@
 app/CMakeFiles/led.dir/src/main.c.o: \
  /home/prasanna/Ensc351/work/newbeginning/led/app/src/main.c \
  /usr/aarch64-linux-gnu/include/stdc-predef.h \
- /home/prasanna/Ensc351/work/newbeginning/led/hal/include/hal/led.h \
+ /home/prasanna/Ensc351/work/newbeginning/led/hal/include/led.h \
  /usr/lib/gcc-cross/aarch64-linux-gnu/14/include/stdbool.h \
- /home/prasanna/Ensc351/work/newbeginning/led/hal/include/hal/joystick.h \
+ /home/prasanna/Ensc351/work/newbeginning/led/hal/include/joystick.h \
  /usr/aarch64-linux-gnu/include/stdio.h \
  /usr/aarch64-linux-gnu/include/bits/libc-header-start.h \
  /usr/aarch64-linux-gnu/include/features.h \
@@ -83,4 +83,33 @@ app/CMakeFiles/led.dir/src/main.c.o: \
  /usr/aarch64-linux-gnu/include/bits/types/locale_t.h \
  /usr/aarch64-linux-gnu/include/bits/types/__locale_t.h \
  /usr/aarch64-linux-gnu/include/string.h \
- /usr/aarch64-linux-gnu/include/strings.h
+ /usr/aarch64-linux-gnu/include/strings.h \
+ /usr/aarch64-linux-gnu/include/pthread.h \
+ /usr/aarch64-linux-gnu/include/sched.h \
+ /usr/aarch64-linux-gnu/include/bits/sched.h \
+ /usr/aarch64-linux-gnu/include/bits/types/struct_sched_param.h \
+ /usr/aarch64-linux-gnu/include/bits/cpu-set.h \
+ /usr/aarch64-linux-gnu/include/bits/pthreadtypes.h \
+ /usr/aarch64-linux-gnu/include/bits/thread-shared-types.h \
+ /usr/aarch64-linux-gnu/include/bits/pthreadtypes-arch.h \
+ /usr/aarch64-linux-gnu/include/bits/atomic_wide_counter.h \
+ /usr/aarch64-linux-gnu/include/bits/struct_mutex.h \
+ /usr/aarch64-linux-gnu/include/bits/struct_rwlock.h \
+ /usr/aarch64-linux-gnu/include/bits/setjmp.h \
+ /usr/aarch64-linux-gnu/include/bits/types/__sigset_t.h \
+ /usr/aarch64-linux-gnu/include/bits/types/struct___jmp_buf_tag.h \
+ /usr/aarch64-linux-gnu/include/bits/pthread_stack_min-dynamic.h \
+ /usr/aarch64-linux-gnu/include/bits/pthread_stack_min.h \
+ /usr/aarch64-linux-gnu/include/stdlib.h \
+ /usr/aarch64-linux-gnu/include/bits/waitflags.h \
+ /usr/aarch64-linux-gnu/include/bits/waitstatus.h \
+ /usr/aarch64-linux-gnu/include/sys/types.h \
+ /usr/aarch64-linux-gnu/include/endian.h \
+ /usr/aarch64-linux-gnu/include/bits/byteswap.h \
+ /usr/aarch64-linux-gnu/include/bits/uintn-identity.h \
+ /usr/aarch64-linux-gnu/include/sys/select.h \
+ /usr/aarch64-linux-gnu/include/bits/select.h \
+ /usr/aarch64-linux-gnu/include/bits/types/sigset_t.h \
+ /usr/aarch64-linux-gnu/include/bits/types/struct_timeval.h \
+ /usr/aarch64-linux-gnu/include/alloca.h \
+ /usr/aarch64-linux-gnu/include/bits/stdlib-float.h

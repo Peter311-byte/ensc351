@@ -12,11 +12,13 @@
 		[
 			"add_executable",
 			"target_link_libraries",
+			"add_compile_options",
 			"include_directories"
 		],
 		"files" : 
 		[
-			"app/CMakeLists.txt"
+			"app/CMakeLists.txt",
+			"CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -36,7 +38,16 @@
 				"parent" : 0
 			},
 			{
+				"file" : 1
+			},
+			{
 				"command" : 2,
+				"file" : 1,
+				"line" : 9,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
 				"file" : 0,
 				"line" : 3,
 				"parent" : 0
@@ -49,13 +60,29 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu2x"
+					"fragment" : "-g -std=gnu11"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "-O0"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "-g3"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "-ggdb"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "-fno-omit-frame-pointer"
 				}
 			],
 			"includes" : 
 			[
 				{
-					"backtrace" : 3,
+					"backtrace" : 5,
 					"path" : "/home/prasanna/Ensc351/work/newbeginning/led/app/include"
 				},
 				{
@@ -70,7 +97,7 @@
 				[
 					1
 				],
-				"standard" : "23"
+				"standard" : "11"
 			},
 			"sourceIndexes" : 
 			[

@@ -1,4 +1,4 @@
-#include "hal/joystick.h"
+#include "joystick.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -64,21 +64,21 @@ return 1; }
         int ch1 = read_ch(fd, 1, speed);  // Y-axis
         if (ch0 < 0 || ch1 < 0) { perror("spi"); return 1;}
 
-        double vx = ch0 * vref / 4095.0;
-        double vy = ch1 * vref / 4095.0;
+        // double vx = ch0 * vref / 4095.0;
+        // double vy = ch1 * vref / 4095.0;
 
         // Capture joystick center once
-        // if ((center0 < 0) && (ch0>2070||ch0<2050)|| (ch1>2050||ch1<2030)){ 
-        //     return -1;
-        // }else if(center0<0){
-        //     center0 = ch0;
-        //     center1 = ch1;
-        // }
+        if ((center0 < 0) && ((ch0>2070||ch0<2050)|| (ch1>2050||ch1<2030))){ 
+            return 2;
+        }else if(center0<0){
+            center0 = ch0;
+            center1 = ch1;
+        }
 
-       if(center0<0){
-        center0 = ch0;
-        center1 = ch1;
-       }
+    //    if(center0<0){
+    //     center0 = ch0;
+    //     center1 = ch1;
+    //    }
         // Normalize to roughly -1..+1 range
         double x = (ch0 - center0) / 2048.0;
         double y = (ch1 - center1) / 2048.0;
@@ -103,9 +103,9 @@ return 1; }
             //     j1.center = 1;
             // }
 
-        printf("RAW X=%4d Y=%4d | Vx=%.3fV Vy=%.3fV | Dir: %-6s %-6s\r",
-               ch0, ch1, vx, vy, horiz, vert);
-        fflush(stdout);
+        // printf("RAW X=%4d Y=%4d | Vx=%.3fV Vy=%.3fV | Dir: %-6s %-6s\r",
+        //        ch0, ch1, vx, vy, horiz, vert);
+        // fflush(stdout);
     
 // }
 

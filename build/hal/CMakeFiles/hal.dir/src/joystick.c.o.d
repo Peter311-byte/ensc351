@@ -1,7 +1,7 @@
 hal/CMakeFiles/hal.dir/src/joystick.c.o: \
  /home/prasanna/Ensc351/work/newbeginning/led/hal/src/joystick.c \
  /usr/aarch64-linux-gnu/include/stdc-predef.h \
- /home/prasanna/Ensc351/work/newbeginning/led/hal/include/hal/joystick.h \
+ /home/prasanna/Ensc351/work/newbeginning/led/hal/include/joystick.h \
  /usr/lib/gcc-cross/aarch64-linux-gnu/14/include/stdbool.h \
  /usr/aarch64-linux-gnu/include/stdio.h \
  /usr/aarch64-linux-gnu/include/bits/libc-header-start.h \

@@ -6,5 +6,5 @@ C_DEFINES =
 
 C_INCLUDES = -I/home/prasanna/Ensc351/work/newbeginning/led/app/include -I/home/prasanna/Ensc351/work/newbeginning/led/hal/include
 
-C_FLAGS = -g -std=gnu2x
+C_FLAGS = -g -std=gnu11 -O0 -g3 -ggdb -fno-omit-frame-pointer
 

@@ -12,12 +12,13 @@
 		"commands" : 
 		[
 			"add_library",
-			"include_directories",
+			"add_compile_options",
 			"target_include_directories"
 		],
 		"files" : 
 		[
-			"hal/CMakeLists.txt"
+			"hal/CMakeLists.txt",
+			"CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -27,19 +28,22 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 6,
-				"parent" : 0
-			},
-			{
-				"command" : 1,
-				"file" : 0,
 				"line" : 3,
 				"parent" : 0
 			},
 			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 9,
+				"parent" : 2
+			},
+			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 8,
+				"line" : 5,
 				"parent" : 0
 			}
 		]
@@ -50,17 +54,29 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu2x"
+					"fragment" : "-g -std=gnu11"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-O0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-g3"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-ggdb"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-fno-omit-frame-pointer"
 				}
 			],
 			"includes" : 
 			[
 				{
-					"backtrace" : 2,
-					"path" : "/home/prasanna/Ensc351/work/newbeginning/led/hal/hal/include"
-				},
-				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "/home/prasanna/Ensc351/work/newbeginning/led/hal/include"
 				}
 			],
@@ -71,7 +87,7 @@
 				[
 					1
 				],
-				"standard" : "23"
+				"standard" : "11"
 			},
 			"sourceIndexes" : 
 			[

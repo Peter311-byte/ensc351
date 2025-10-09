@@ -4,7 +4,7 @@
 # compile C with /usr/bin/aarch64-linux-gnu-gcc
 C_DEFINES = 
 
-C_INCLUDES = -I/home/prasanna/Ensc351/work/newbeginning/led/hal/hal/include -I/home/prasanna/Ensc351/work/newbeginning/led/hal/include
+C_INCLUDES = -I/home/prasanna/Ensc351/work/newbeginning/led/hal/include
 
-C_FLAGS = -g -std=gnu2x
+C_FLAGS = -g -std=gnu11 -O0 -g3 -ggdb -fno-omit-frame-pointer
 
