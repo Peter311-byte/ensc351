@@ -5,6 +5,8 @@
         "string.h": "c",
         "stdbool.h": "c",
         "stdio.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "unistd.h": "c",
+        "ioctl.h": "c"
     }
 }

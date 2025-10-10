@@ -88,13 +88,13 @@ return 1; }
         if (y > -DEADZONE && y < DEADZONE) y = 0.0;
 
         // Determine direction labels
-        const char* horiz =
-            (x <= -THRESH) ? "LEFT"  :
-            (x >=  THRESH) ? "RIGHT" : "CENTER";
+        Direction horiz =
+            (x <= -THRESH) ? DIR_LEFT  :
+            (x >=  THRESH) ? DIR_RIGHT : DIR_CENTER;
 
-        const char* vert  =
-            (y <= -THRESH) ? "DOWN"    :
-            (y >=  THRESH) ? "UP"  : "CENTER";
+        Direction vert  =
+            (y <= -THRESH) ? DIR_DOWN    :
+            (y >=  THRESH) ? DIR_UP : DIR_CENTER;
 
             j1.x = horiz;
             j1.y = vert;
@@ -113,11 +113,11 @@ return 1; }
 
 }
 
-const char* getX(void){
+Direction getX(void){
     return j1.x;
 }
 
-const char* getY(void){
+Direction getY(void){
     return j1.y;
 }
 

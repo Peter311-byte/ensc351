@@ -4,12 +4,24 @@
 #include<time.h>
 #include<stdbool.h>
 #include<string.h>
-#include<pthread.h>
 #include <stdlib.h>
 static bool exitLoop = 1;
 bool running = 1;
 int state = 0;
-const char* chosenDirection;
+Direction chosenDirection;
+
+
+static long long getTimeInMs(void)
+{
+ struct timespec spec;
+ clock_gettime(CLOCK_REALTIME, &spec);
+ long long seconds = spec.tv_sec;
+ long long nanoSeconds = spec.tv_nsec;
+ long long milliSeconds = seconds * 1000
+ + nanoSeconds / 1000000;
+ return milliSeconds;
+}
+
 
 void set_led(void){
  struct timespec delay = {0,250000000};
@@ -39,13 +51,13 @@ void closeFile(int x){
 
 void joystick_task(int fd){
   while(exitLoop == 1){
-   int x  = read_direction(fd);
-  //  x = 2; // for debugging purposes - remove after
-  if(x==2){
+   int r  = read_direction(fd);
+   Direction x = getX();
+   Direction y = getY();
+  if(r==2){
     printf("Please leave the joystick in the middle.\n");
     sleep(3);
     int y = read_direction(fd);
-    // y =2; // for debugging purposes - remove after
       if(y == 2){
         printf("Too soon!\n");
         exitLoop = 0;
@@ -56,7 +68,7 @@ void joystick_task(int fd){
         continue;
       }
   }
-    if( strcmp(getX(),"LEFT") == 0|| strcmp(getX(), "RIGHT") == 0){
+    if( (x == DIR_LEFT || x == DIR_RIGHT) &&(y!=DIR_UP)){
     state = 2;
     exitLoop =0;
     continue;  
@@ -65,6 +77,16 @@ void joystick_task(int fd){
   if(state!=3){
     state = 3;
     exitLoop = 0;
+    continue;
+  }
+
+  if(state == 3){
+    if(y == chosenDirection){
+      printf("You did it! \n");
+      state = 2;
+      exitLoop = 0;
+      continue;
+    }
   }
  usleep(20000);
 }
@@ -93,17 +115,31 @@ while(running == 1){
     break;
   
   case 3:
-    exitLoop = 1;
    srand(time(NULL));
    int r = rand() % 2;
-   chosenDirection = (r == 0) ? "UP": "DOWN";
+   chosenDirection = (r == 0) ? DIR_UP: DIR_DOWN;
    printf("Get ready...\n");
-   if(strcmp(chosenDirection,"UP")){
+   if(chosenDirection == DIR_UP){
     led_setGreenBrightness(1);
-    printf("Press UP now!");
-   }else if(strcmp(chosenDirection,"DOWN")){
+    printf("Press UP now!\n");
+    long long timeBefore = getTimeInMs();
+    exitLoop = 1;
+    joystick_task(fd);
+    long long timeAfter = getTimeInMs();
+
+    long long reaction_time = timeAfter - timeBefore;
+    printf("Your time is %lld ms\n", reaction_time);
+    
+   }else if(chosenDirection == DIR_DOWN){
     led_setRedBrightness(1);
-    printf("Press DOWN now!");
+    printf("Press DOWN now!\n");
+    long long timeBefore = getTimeInMs();
+    exitLoop = 1;
+    joystick_task(fd);
+    long long timeAfter = getTimeInMs();
+
+    long long reaction_time = timeAfter - timeBefore;
+    printf("Your time is %lld ms\n", reaction_time);
    }
 
 }

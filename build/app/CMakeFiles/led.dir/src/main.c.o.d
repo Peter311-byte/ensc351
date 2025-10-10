@@ -84,22 +84,6 @@ app/CMakeFiles/led.dir/src/main.c.o: \
  /usr/aarch64-linux-gnu/include/bits/types/__locale_t.h \
  /usr/aarch64-linux-gnu/include/string.h \
  /usr/aarch64-linux-gnu/include/strings.h \
- /usr/aarch64-linux-gnu/include/pthread.h \
- /usr/aarch64-linux-gnu/include/sched.h \
- /usr/aarch64-linux-gnu/include/bits/sched.h \
- /usr/aarch64-linux-gnu/include/bits/types/struct_sched_param.h \
- /usr/aarch64-linux-gnu/include/bits/cpu-set.h \
- /usr/aarch64-linux-gnu/include/bits/pthreadtypes.h \
- /usr/aarch64-linux-gnu/include/bits/thread-shared-types.h \
- /usr/aarch64-linux-gnu/include/bits/pthreadtypes-arch.h \
- /usr/aarch64-linux-gnu/include/bits/atomic_wide_counter.h \
- /usr/aarch64-linux-gnu/include/bits/struct_mutex.h \
- /usr/aarch64-linux-gnu/include/bits/struct_rwlock.h \
- /usr/aarch64-linux-gnu/include/bits/setjmp.h \
- /usr/aarch64-linux-gnu/include/bits/types/__sigset_t.h \
- /usr/aarch64-linux-gnu/include/bits/types/struct___jmp_buf_tag.h \
- /usr/aarch64-linux-gnu/include/bits/pthread_stack_min-dynamic.h \
- /usr/aarch64-linux-gnu/include/bits/pthread_stack_min.h \
  /usr/aarch64-linux-gnu/include/stdlib.h \
  /usr/aarch64-linux-gnu/include/bits/waitflags.h \
  /usr/aarch64-linux-gnu/include/bits/waitstatus.h \
@@ -110,6 +94,13 @@ app/CMakeFiles/led.dir/src/main.c.o: \
  /usr/aarch64-linux-gnu/include/sys/select.h \
  /usr/aarch64-linux-gnu/include/bits/select.h \
  /usr/aarch64-linux-gnu/include/bits/types/sigset_t.h \
+ /usr/aarch64-linux-gnu/include/bits/types/__sigset_t.h \
  /usr/aarch64-linux-gnu/include/bits/types/struct_timeval.h \
+ /usr/aarch64-linux-gnu/include/bits/pthreadtypes.h \
+ /usr/aarch64-linux-gnu/include/bits/thread-shared-types.h \
+ /usr/aarch64-linux-gnu/include/bits/pthreadtypes-arch.h \
+ /usr/aarch64-linux-gnu/include/bits/atomic_wide_counter.h \
+ /usr/aarch64-linux-gnu/include/bits/struct_mutex.h \
+ /usr/aarch64-linux-gnu/include/bits/struct_rwlock.h \
  /usr/aarch64-linux-gnu/include/alloca.h \
  /usr/aarch64-linux-gnu/include/bits/stdlib-float.h
