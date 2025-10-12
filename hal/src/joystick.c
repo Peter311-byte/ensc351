@@ -52,33 +52,19 @@ return 1; }
  if (ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed) == -1)
 { perror("speed"); return 1; }
 
-//  printf("Reading MCP3208 joystick on %s (speed %u Hz, vref %.2fV)\n", dev, speed, vref);
-//     printf("Move the joystick — press Ctrl+C to stop.\n");
-
     static int center0 = -1, center1 = -1;
-
-// for(;;){
-
 
         int ch0 = read_ch(fd, 0, speed);  // X-axis
         int ch1 = read_ch(fd, 1, speed);  // Y-axis
         if (ch0 < 0 || ch1 < 0) { perror("spi"); return 1;}
 
-        // double vx = ch0 * vref / 4095.0;
-        // double vy = ch1 * vref / 4095.0;
-
         // Capture joystick center once
-        if ((center0 < 0) && ((ch0>2070||ch0<2050)|| (ch1>2050||ch1<2030))){ 
+        if ((center0 < 0) && ((ch0>2070||ch0<2050)|| (ch1>2050||ch1<2030))){
             return 2;
         }else if(center0<0){
             center0 = ch0;
             center1 = ch1;
         }
-
-    //    if(center0<0){
-    //     center0 = ch0;
-    //     center1 = ch1;
-    //    }
         // Normalize to roughly -1..+1 range
         double x = (ch0 - center0) / 2048.0;
         double y = (ch1 - center1) / 2048.0;
@@ -99,16 +85,7 @@ return 1; }
             j1.x = horiz;
             j1.y = vert;
 
-            // if(horiz == "CENTER" && vert == "CENTER"){
-            //     j1.center = 1;
-            // }
-
-        // printf("RAW X=%4d Y=%4d | Vx=%.3fV Vy=%.3fV | Dir: %-6s %-6s\r",
-        //        ch0, ch1, vx, vy, horiz, vert);
-        // fflush(stdout);
-    
-// }
-
+        j1.center = (horiz == DIR_CENTER && vert == DIR_CENTER) ? 1 : 0;
  return 0;
 
 }
@@ -121,6 +98,6 @@ Direction getY(void){
     return j1.y;
 }
 
-bool center(void){
+bool isCenter(void){
     return j1.center;
 }
