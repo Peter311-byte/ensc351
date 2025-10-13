@@ -6,15 +6,32 @@
 #include<string.h>
 #include <stdlib.h>
 
-/// global variables for main
+/// global variables for main/////////
 static bool exitLoop = 1;
 bool running = 1;
 int state = 0;
 Direction chosenDirection;
 Direction oppDirection;
 long long best_time = -1;
+int won;
+/////////////////////////////////////
 
-///////////////////////////
+void set_LEDGREEN(void){
+  led_setGreenBrightness(1);
+  usleep(100000);  
+  led_setGreenBrightness(0);
+  usleep(100000);  
+
+
+}
+
+void set_LEDRED(void){
+  led_setRedBrightness(1);
+  usleep(100000);  
+  led_setRedBrightness(0);
+  usleep(100000);  
+
+}
 
 static long long getTimeInMs(void)
 {
@@ -85,16 +102,16 @@ void joystick_task(int fd){
 
   if(state == 3){
     if(y == chosenDirection){
-      printf("You did it! \n"); // move these two lines later
-      led_setGreenBrightness(1);//
+      printf("You did it! \n"); // move these two lines later//
       state = 3;
       exitLoop = 0;
+      won = 1;
       continue;
     } else if (y == oppDirection){
       printf("Wrong Direction!\n");
-      led_setRedBrightness(1);
       state = 3;
       exitLoop = 0;
+      won = 0;
       continue;
 
     }
@@ -130,6 +147,7 @@ while(running == 1){
   case 3:
   led_setGreenBrightness(0);
   led_setRedBrightness(0);
+  won = -1;
 
    int r = rand() % 2;
    chosenDirection = (r == 0) ? DIR_UP: DIR_DOWN;
@@ -137,7 +155,7 @@ while(running == 1){
    
   
 //regular center checks
-  sleep(1); // give time to reset
+  sleep(2); // give time to reset
   read_direction(fd);
   if(isCenter() != 1){//check if joystick is center
     printf("Please leave the joystick in the middle.\n");
@@ -164,20 +182,31 @@ while(running == 1){
     long long timeAfter = getTimeInMs();
     long long reaction_time = timeAfter - timeBefore;
 
-
+    led_setGreenBrightness(0);
+    led_setRedBrightness(0);
   if(state!=2){
-    if(best_time == -1){
+    if(best_time == -1 && won == 1){
       best_time = reaction_time;
     }
 
-    if(reaction_time<best_time){
+    if(won == 1){
+      set_LEDGREEN();
+    }else{
+      set_LEDRED();
+    }
+
+    if(reaction_time<best_time && won == 1){
       best_time = reaction_time;
       printf("New Best time!");
-    }
+    }else if(won == 1){
       printf("Your time is %lld ms\n", reaction_time);
       printf("Current best time is %lld ms\n", best_time);
-  }
+
+    }
+       
     
+     
+  }
     
     
    }else if(chosenDirection == DIR_DOWN){
@@ -191,18 +220,29 @@ while(running == 1){
     long long timeAfter = getTimeInMs();
     long long reaction_time = timeAfter - timeBefore;
 
+    led_setGreenBrightness(0);
+    led_setRedBrightness(0);
   
    if(state!=2){
-    if(best_time == -1){
+    if(best_time == -1 && won == 1){
       best_time = reaction_time;
     }
 
-    if(reaction_time<best_time){
+     if(won == 1){
+      set_LEDGREEN();
+    }else{
+      set_LEDRED();
+    }
+
+    if(reaction_time<best_time && won == 1){
       best_time = reaction_time;
       printf("New Best time!\n");
-    }
+    } else if(won == 1){
       printf("Your time is %lld ms\n", reaction_time);
       printf("Current best time is %lld ms\n", best_time);
+
+    }
+      
   }
     
 }
@@ -211,7 +251,7 @@ while(running == 1){
 
 break;
 
-}
+ }
 }
 
 }

@@ -40,7 +40,7 @@ uint8_t bits = 8;
 uint32_t speed = 250000;
  double vref = 3.300; // ADC reference (same as joystick supply)
 // Direction tuning constants
-const double DEADZONE = 0.08; // ignore small movements
+const double DEADZONE = 0.10; // ignore small movements
 const double THRESH   = 0.30; // 
 
 
