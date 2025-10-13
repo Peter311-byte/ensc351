@@ -33,6 +33,31 @@ void set_LEDRED(void){
 
 }
 
+static inline long long now_ms_monotonic(void) {
+  struct timespec ts;
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  return (long long)ts.tv_sec * 1000LL + ts.tv_nsec / 1000000LL;
+}
+
+static inline void sleep_ms(int ms) {
+  struct timespec ts = { ms / 1000, (ms % 1000) * 1000000L };
+  nanosleep(&ts, NULL);
+}
+
+
+static int wait_for_center_stable(int fd, int needed, int poll_ms, int timeout_ms) {
+  int consec = 0;
+  long long t0 = now_ms_monotonic();
+  while ((now_ms_monotonic() - t0) < timeout_ms) {
+    read_direction(fd);             
+    if (isCenter() == 1) consec++;  
+    else consec = 0;
+    if (consec >= needed) return 1; 
+    sleep_ms(poll_ms);              
+  }
+  return 0; 
+}
+
 static long long getTimeInMs(void)
 {
  struct timespec spec;
@@ -72,6 +97,7 @@ void closeFile(int x){
 
 void joystick_task(int fd){
   while(exitLoop == 1){
+  
    int r  = read_direction(fd);
    Direction x = getX();
    Direction y = getY();
@@ -155,20 +181,20 @@ while(running == 1){
    
   
 //regular center checks
-  sleep(2); // give time to reset
-  read_direction(fd);
-  if(isCenter() != 1){//check if joystick is center
+
+  sleep(2); 
+  if (!wait_for_center_stable(fd, 4, 20, 1000)) {
     printf("Please leave the joystick in the middle.\n");
-    sleep(3);
-    read_direction(fd); //if not wait for center
-    if(isCenter() !=  1){ 
+    int z = wait_for_center_stable(fd,4,20,3000);
+    if(!z){
       printf("Too soon!\n");
-        exitLoop = 0;
-        running = 1;
-        state = 1;
-        break;
-    }  
+      exitLoop = 0;
+      running = 1;
+      state = 1;
+      continue;
+    }
   }
+  
 
 
    if(chosenDirection == DIR_UP){
@@ -184,6 +210,7 @@ while(running == 1){
 
     led_setGreenBrightness(0);
     led_setRedBrightness(0);
+
   if(state!=2){
     if(best_time == -1 && won == 1){
       best_time = reaction_time;
@@ -197,15 +224,13 @@ while(running == 1){
 
     if(reaction_time<best_time && won == 1){
       best_time = reaction_time;
-      printf("New Best time!");
+      printf("New Best time!\n");
     }else if(won == 1){
       printf("Your time is %lld ms\n", reaction_time);
       printf("Current best time is %lld ms\n", best_time);
 
     }
        
-    
-     
   }
     
     
@@ -246,9 +271,6 @@ while(running == 1){
   }
     
 }
-
-
-
 break;
 
  }
