@@ -1,1 +1,0 @@
-/usr/bin/aarch64-linux-gnu-gcc -g -Wl,--dependency-file=CMakeFiles/led.dir/link.d CMakeFiles/led.dir/src/main.c.o -o led  ../hal/libhal.a

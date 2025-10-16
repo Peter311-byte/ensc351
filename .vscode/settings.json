@@ -1,5 +1,5 @@
 {
-    "cmake.sourceDirectory": "/home/prasanna/Ensc351/work/newbeginning/led",
+    "cmake.sourceDirectory": "/home/prasanna/Ensc351/work/newbeginning/asl-reaction_timer",
     "files.associations": {
         "pthread.h": "c",
         "string.h": "c",

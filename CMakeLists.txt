@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.18)
-project(LED VERSION 1.0 DESCRIPTION "LED project" LANGUAGES C)
+project(LED VERSION 1.0 DESCRIPTION "Reaction time_project project" LANGUAGES C)
 
 
 set(CMAKE_C_STANDARD 11)
@@ -10,3 +10,4 @@ add_compile_options(-O0 -g3 -ggdb -fno-omit-frame-pointer)
 
 add_subdirectory(hal)
 add_subdirectory(app)
+
