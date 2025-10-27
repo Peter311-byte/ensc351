@@ -1,27 +1,39 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include<stdbool.h>
 #include<stdint.h>
+#include<stdatomic.h>
 #include<unistd.h>
 #include<fcntl.h>
 #include<sys/ioctl.h>
 #include<linux/spi/spidev.h>
 #include<pthread.h>
+#include<time.h>
 #include "sampler.h"
 
-//////////////////////////////////////////////////////
-pthread_t sampler;
+
+// GLOBAL VARIABLES for this c file///
+
 const char* dev = "/dev/spidev0.0";
 uint8_t mode = 0; // SPI mode 0
 uint8_t bits = 8;
 uint32_t speed = 250000;
-double vref = 3.300;
-bool averageIntialized = 0;
-double a = 0.0;
-int fd;
+
+pthread_t light_sampler;
+
+bool running;
+
+double vref = 3.3000;
+
+int fd = 0;
+
 double* current_arr;
 double* history_arr;
 
-//////////////////////////////////////////////////
+
+/////////////////////////////////////
+
 
 
 static int read_ch(int fd, int ch, uint32_t speed_hz){
@@ -46,53 +58,87 @@ return ((rx[1] & 0x0F) << 8) | rx[2];
 
 }
 
-void sampler_moveCurrentDataHistory(void){
-    
-    for(int j = 0; j<1000; ++j){
-        history_arr[j] = current_arr[j];
-    }
-
-    memset(current_arr,0,1000*sizeof(double));
-
-}
-
-void* light_sampler(void* arg){
-    int i = 0;
-    for(;;){
-        int ch0 = read_ch(fd,0,speed);
-        double voltage_R10k = ch0*(vref/4095.0);
-        if(i<1000){
-            current_arr[i] = voltage_R10k;
-            i = i+1;
-        }else{
-           sampler_moveCurrentDataHistory();
-        }
-    }
-
-}
-
-
-void sampler_init(void){
+int openFile(void){
     fd = open(dev, O_RDWR);
-
     if (fd < 0) { perror("open"); return 1; }
-
     if (ioctl(fd, SPI_IOC_WR_MODE, &mode) == -1) { perror("mode"); return
     1; }
 
     if (ioctl(fd, SPI_IOC_WR_BITS_PER_WORD, &bits) == -1) { perror("bpw");
     return 1; }
+    if (ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed) == -1)
+    { perror("speed"); return 1; }
+}
 
-    if(ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed) == -1)
-    {perror("speed"); return 1; }
+void sampler_moveCurrentDataHistory(void){
+    double*temp = history_arr;
+    history_arr = current_arr;
+    current_arr = temp;
+    memset(current_arr,0.0,1000*sizeof(current_arr[0]));
 
+    // printf("Updated history_arr!\n");
+
+    //    for (int i=0; i<5; i++){
+
+    //        printf("%.3f", current_arr[i]);
+
+    //    } // remove later
+   
+
+}
+
+void*sampler(void* arg){
+
+    time_t start = time(NULL);
+    int i = 0;
+    while(running == true){
+        int ch0 = read_ch(fd, 0, speed);  // ch0 value
+        double voltage_R10K = ch0*(vref/4095.0);
+
+        if(difftime(time(NULL),start)>=1.0){
+    //     for (int i=0; i<5; i++){
+    //        printf("%.3f ", current_arr[i]);
+
+    //    } // remove later
+            sampler_moveCurrentDataHistory();
+            i = 0;
+            start = time(NULL);
+        }else{
+            if(i<1000){
+                current_arr[i] = voltage_R10K;
+                i=i+1;
+            }
+
+        }
+
+
+        printf("Light Intensity (voltage) = %.3f\n", voltage_R10K);
+
+        usleep(1000);
+        
+    }
+}
+
+void sampler_init(void){
+
+    int x = openFile(); // open file for the spi readings
+    if(x!=0){
+        return;
+    }
+
+    running = true;
     current_arr = (double*)malloc(1000*sizeof(double));
+    history_arr = (double*)malloc(1000*sizeof(double));
+    pthread_create(&light_sampler, NULL, sampler, NULL);
 
-    pthread_create(&sampler,NULL,light_sampler,NULL);
 }
 
 
 void sampler_cleanup(void){
+    running = false;
+    pthread_join(light_sampler, NULL);
+    free(current_arr);
+    free(history_arr);
     close(fd);
-    pthread_join(sampler,NULL);
+    
 }
