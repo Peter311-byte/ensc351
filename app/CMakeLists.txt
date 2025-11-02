@@ -4,6 +4,7 @@ include_directories(include)
 file(GLOB MY_SOURCES "src/*.c")
 add_executable(assign2 ${MY_SOURCES})
 
+
 # Make use of the HAL library
 target_link_libraries(assign2 LINK_PRIVATE hal)
 

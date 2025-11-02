@@ -1,0 +1,26 @@
+[
+{
+  "directory": "/home/prasanna/Ensc351/work/assign2/build/hal",
+  "command": "/usr/bin/aarch64-linux-gnu-gcc  -I/home/prasanna/Ensc351/work/assign2/hal/include -g -std=gnu11 -O0 -g3 -ggdb -fno-omit-frame-pointer -o CMakeFiles/hal.dir/src/blinker.c.o -c /home/prasanna/Ensc351/work/assign2/hal/src/blinker.c",
+  "file": "/home/prasanna/Ensc351/work/assign2/hal/src/blinker.c",
+  "output": "hal/CMakeFiles/hal.dir/src/blinker.c.o"
+},
+{
+  "directory": "/home/prasanna/Ensc351/work/assign2/build/hal",
+  "command": "/usr/bin/aarch64-linux-gnu-gcc  -I/home/prasanna/Ensc351/work/assign2/hal/include -g -std=gnu11 -O0 -g3 -ggdb -fno-omit-frame-pointer -o CMakeFiles/hal.dir/src/rotaryencoder.c.o -c /home/prasanna/Ensc351/work/assign2/hal/src/rotaryencoder.c",
+  "file": "/home/prasanna/Ensc351/work/assign2/hal/src/rotaryencoder.c",
+  "output": "hal/CMakeFiles/hal.dir/src/rotaryencoder.c.o"
+},
+{
+  "directory": "/home/prasanna/Ensc351/work/assign2/build/hal",
+  "command": "/usr/bin/aarch64-linux-gnu-gcc  -I/home/prasanna/Ensc351/work/assign2/hal/include -g -std=gnu11 -O0 -g3 -ggdb -fno-omit-frame-pointer -o CMakeFiles/hal.dir/src/sampler.c.o -c /home/prasanna/Ensc351/work/assign2/hal/src/sampler.c",
+  "file": "/home/prasanna/Ensc351/work/assign2/hal/src/sampler.c",
+  "output": "hal/CMakeFiles/hal.dir/src/sampler.c.o"
+},
+{
+  "directory": "/home/prasanna/Ensc351/work/assign2/build/app",
+  "command": "/usr/bin/aarch64-linux-gnu-gcc  -I/home/prasanna/Ensc351/work/assign2/app/include -I/home/prasanna/Ensc351/work/assign2/hal/include -g -std=gnu11 -O0 -g3 -ggdb -fno-omit-frame-pointer -o CMakeFiles/assign2.dir/src/main.c.o -c /home/prasanna/Ensc351/work/assign2/app/src/main.c",
+  "file": "/home/prasanna/Ensc351/work/assign2/app/src/main.c",
+  "output": "app/CMakeFiles/assign2.dir/src/main.c.o"
+}
+]

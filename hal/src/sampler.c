@@ -112,7 +112,7 @@ void*sampler(void* arg){
         }
 
 
-        printf("Light Intensity (voltage) = %.3f\n", voltage_R10K);
+        // printf("Light Intensity (voltage) = %.3f\n", voltage_R10K);
 
         usleep(1000);
         
