@@ -3,11 +3,10 @@
 #include <signal.h>
 #include <stdatomic.h>
 #include <unistd.h>
-
 #include "sampler.h"        //sampler_init/cleanup
 #include "rotaryencoder.h"  // encoder_init/encoder_stop (libgpiod v2)
 #include "blinker.h"        // Blinker_init/Blinker_stop (software PWM)
-
+#include "udp.h"
 static volatile sig_atomic_t stop_flag = 0;
 static void on_sigint(int _){ (void)_; stop_flag = 1; }
 
@@ -34,16 +33,19 @@ int main()
     // 3) Start LED blinker (software PWM) using blink_hz
     Blinker_init(chip, LED, &blink_hz);
 
+    udp_init();
+
     printf("Running: chip=%s  A=%u  B=%u  LED=%u  (Ctrl+C to stop)\n",
            chip, A, B, LED);
 
     // 4) Main loop: once per second show current blink rate
     while (!stop_flag) {
-        printf("Blink @ %d Hz\n", atomic_load(&blink_hz));
+        // printf("Blink @ %d Hz\n", atomic_load(&blink_hz));
         sleep(1);
     }
 
     // 5) Clean shutdown (reverse init order)
+    udp_cleanup();
     Blinker_stop();
     encoder_stop();
     sampler_cleanup();

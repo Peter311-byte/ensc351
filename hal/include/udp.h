@@ -2,7 +2,7 @@
 #define _UDP_H_
 
 
-void udp_init(int argc, char*argv[]);
+void udp_init(void);
 
 void udp_cleanup(void);
 

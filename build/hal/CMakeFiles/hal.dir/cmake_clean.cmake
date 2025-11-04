@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/hal.dir/src/rotaryencoder.c.o.d"
   "CMakeFiles/hal.dir/src/sampler.c.o"
   "CMakeFiles/hal.dir/src/sampler.c.o.d"
+  "CMakeFiles/hal.dir/src/udp.c.o"
+  "CMakeFiles/hal.dir/src/udp.c.o.d"
   "libhal.a"
   "libhal.pdb"
 )

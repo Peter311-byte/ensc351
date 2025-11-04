@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/prasanna/Ensc351/work/assign2/hal/src/blinker.c" "hal/CMakeFiles/hal.dir/src/blinker.c.o" "gcc" "hal/CMakeFiles/hal.dir/src/blinker.c.o.d"
   "/home/prasanna/Ensc351/work/assign2/hal/src/rotaryencoder.c" "hal/CMakeFiles/hal.dir/src/rotaryencoder.c.o" "gcc" "hal/CMakeFiles/hal.dir/src/rotaryencoder.c.o.d"
   "/home/prasanna/Ensc351/work/assign2/hal/src/sampler.c" "hal/CMakeFiles/hal.dir/src/sampler.c.o" "gcc" "hal/CMakeFiles/hal.dir/src/sampler.c.o.d"
+  "/home/prasanna/Ensc351/work/assign2/hal/src/udp.c" "hal/CMakeFiles/hal.dir/src/udp.c.o" "gcc" "hal/CMakeFiles/hal.dir/src/udp.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

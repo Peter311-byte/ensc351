@@ -202,6 +202,30 @@ src/sampler.c.s:
 	cd /home/prasanna/Ensc351/work/assign2/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/sampler.c.s
 .PHONY : src/sampler.c.s
 
+src/udp.o: src/udp.c.o
+.PHONY : src/udp.o
+
+# target to build an object file
+src/udp.c.o:
+	cd /home/prasanna/Ensc351/work/assign2/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/udp.c.o
+.PHONY : src/udp.c.o
+
+src/udp.i: src/udp.c.i
+.PHONY : src/udp.i
+
+# target to preprocess a source file
+src/udp.c.i:
+	cd /home/prasanna/Ensc351/work/assign2/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/udp.c.i
+.PHONY : src/udp.c.i
+
+src/udp.s: src/udp.c.s
+.PHONY : src/udp.s
+
+# target to generate assembly for a file
+src/udp.c.s:
+	cd /home/prasanna/Ensc351/work/assign2/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/udp.c.s
+.PHONY : src/udp.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -220,6 +244,9 @@ help:
 	@echo "... src/sampler.o"
 	@echo "... src/sampler.i"
 	@echo "... src/sampler.s"
+	@echo "... src/udp.o"
+	@echo "... src/udp.i"
+	@echo "... src/udp.s"
 .PHONY : help
 
 

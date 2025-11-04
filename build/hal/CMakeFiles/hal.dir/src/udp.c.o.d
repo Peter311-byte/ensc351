@@ -1,5 +1,5 @@
-app/CMakeFiles/assign2.dir/src/main.c.o: \
- /home/prasanna/Ensc351/work/assign2/app/src/main.c \
+hal/CMakeFiles/hal.dir/src/udp.c.o: \
+ /home/prasanna/Ensc351/work/assign2/hal/src/udp.c \
  /usr/aarch64-linux-gnu/include/stdc-predef.h \
  /usr/aarch64-linux-gnu/include/stdio.h \
  /usr/aarch64-linux-gnu/include/bits/libc-header-start.h \
@@ -54,6 +54,51 @@ app/CMakeFiles/assign2.dir/src/main.c.o: \
  /usr/aarch64-linux-gnu/include/bits/struct_rwlock.h \
  /usr/aarch64-linux-gnu/include/alloca.h \
  /usr/aarch64-linux-gnu/include/bits/stdlib-float.h \
+ /usr/aarch64-linux-gnu/include/unistd.h \
+ /usr/aarch64-linux-gnu/include/bits/posix_opt.h \
+ /usr/aarch64-linux-gnu/include/bits/environments.h \
+ /usr/aarch64-linux-gnu/include/bits/confname.h \
+ /usr/aarch64-linux-gnu/include/bits/getopt_posix.h \
+ /usr/aarch64-linux-gnu/include/bits/getopt_core.h \
+ /usr/aarch64-linux-gnu/include/bits/unistd_ext.h \
+ /usr/lib/gcc-cross/aarch64-linux-gnu/14/include/stdbool.h \
+ /usr/aarch64-linux-gnu/include/sys/socket.h \
+ /usr/aarch64-linux-gnu/include/bits/types/struct_iovec.h \
+ /usr/aarch64-linux-gnu/include/bits/socket.h \
+ /usr/aarch64-linux-gnu/include/bits/socket_type.h \
+ /usr/aarch64-linux-gnu/include/bits/sockaddr.h \
+ /usr/aarch64-linux-gnu/include/asm/socket.h \
+ /usr/aarch64-linux-gnu/include/asm-generic/socket.h \
+ /usr/aarch64-linux-gnu/include/linux/posix_types.h \
+ /usr/aarch64-linux-gnu/include/linux/stddef.h \
+ /usr/aarch64-linux-gnu/include/asm/posix_types.h \
+ /usr/aarch64-linux-gnu/include/asm-generic/posix_types.h \
+ /usr/aarch64-linux-gnu/include/asm/bitsperlong.h \
+ /usr/aarch64-linux-gnu/include/asm-generic/bitsperlong.h \
+ /usr/aarch64-linux-gnu/include/asm/sockios.h \
+ /usr/aarch64-linux-gnu/include/asm-generic/sockios.h \
+ /usr/aarch64-linux-gnu/include/bits/types/struct_osockaddr.h \
+ /usr/aarch64-linux-gnu/include/arpa/inet.h \
+ /usr/aarch64-linux-gnu/include/netinet/in.h \
+ /usr/aarch64-linux-gnu/include/bits/stdint-uintn.h \
+ /usr/aarch64-linux-gnu/include/bits/in.h \
+ /usr/aarch64-linux-gnu/include/pthread.h \
+ /usr/aarch64-linux-gnu/include/sched.h \
+ /usr/aarch64-linux-gnu/include/bits/sched.h \
+ /usr/aarch64-linux-gnu/include/bits/types/struct_sched_param.h \
+ /usr/aarch64-linux-gnu/include/bits/cpu-set.h \
+ /usr/aarch64-linux-gnu/include/time.h \
+ /usr/aarch64-linux-gnu/include/bits/time.h \
+ /usr/aarch64-linux-gnu/include/bits/types/struct_tm.h \
+ /usr/aarch64-linux-gnu/include/bits/types/struct_itimerspec.h \
+ /usr/aarch64-linux-gnu/include/bits/types/locale_t.h \
+ /usr/aarch64-linux-gnu/include/bits/types/__locale_t.h \
+ /usr/aarch64-linux-gnu/include/bits/setjmp.h \
+ /usr/aarch64-linux-gnu/include/bits/types/struct___jmp_buf_tag.h \
+ /usr/aarch64-linux-gnu/include/bits/pthread_stack_min-dynamic.h \
+ /usr/aarch64-linux-gnu/include/bits/pthread_stack_min.h \
+ /usr/aarch64-linux-gnu/include/string.h \
+ /usr/aarch64-linux-gnu/include/strings.h \
  /usr/aarch64-linux-gnu/include/signal.h \
  /usr/aarch64-linux-gnu/include/bits/signum-generic.h \
  /usr/aarch64-linux-gnu/include/bits/signum-arch.h \
@@ -72,12 +117,6 @@ app/CMakeFiles/assign2.dir/src/main.c.o: \
  /usr/aarch64-linux-gnu/include/asm/types.h \
  /usr/aarch64-linux-gnu/include/asm-generic/types.h \
  /usr/aarch64-linux-gnu/include/asm-generic/int-ll64.h \
- /usr/aarch64-linux-gnu/include/asm/bitsperlong.h \
- /usr/aarch64-linux-gnu/include/asm-generic/bitsperlong.h \
- /usr/aarch64-linux-gnu/include/linux/posix_types.h \
- /usr/aarch64-linux-gnu/include/linux/stddef.h \
- /usr/aarch64-linux-gnu/include/asm/posix_types.h \
- /usr/aarch64-linux-gnu/include/asm-generic/posix_types.h \
  /usr/aarch64-linux-gnu/include/asm/sve_context.h \
  /usr/aarch64-linux-gnu/include/bits/types/stack_t.h \
  /usr/aarch64-linux-gnu/include/sys/ucontext.h \
@@ -94,15 +133,5 @@ app/CMakeFiles/assign2.dir/src/main.c.o: \
  /usr/aarch64-linux-gnu/include/bits/types/struct_sigstack.h \
  /usr/aarch64-linux-gnu/include/bits/sigthread.h \
  /usr/aarch64-linux-gnu/include/bits/signal_ext.h \
- /usr/lib/gcc-cross/aarch64-linux-gnu/14/include/stdatomic.h \
- /usr/aarch64-linux-gnu/include/unistd.h \
- /usr/aarch64-linux-gnu/include/bits/posix_opt.h \
- /usr/aarch64-linux-gnu/include/bits/environments.h \
- /usr/aarch64-linux-gnu/include/bits/confname.h \
- /usr/aarch64-linux-gnu/include/bits/getopt_posix.h \
- /usr/aarch64-linux-gnu/include/bits/getopt_core.h \
- /usr/aarch64-linux-gnu/include/bits/unistd_ext.h \
- /home/prasanna/Ensc351/work/assign2/hal/include/sampler.h \
- /home/prasanna/Ensc351/work/assign2/hal/include/rotaryencoder.h \
- /home/prasanna/Ensc351/work/assign2/hal/include/blinker.h \
- /home/prasanna/Ensc351/work/assign2/hal/include/udp.h
+ /home/prasanna/Ensc351/work/assign2/hal/include/udp.h \
+ /home/prasanna/Ensc351/work/assign2/hal/include/sampler.h
