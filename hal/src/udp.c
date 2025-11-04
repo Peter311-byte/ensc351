@@ -23,7 +23,7 @@ static bool running = true;
 
 
 void handle_command(char* userInput, int sockfd, struct sockaddr_in client_address, socklen_t size){
-    char previous_input [sizeof(userInput)];
+    char* previous_input [sizeof(userInput)];
     char reply [1024];
     if(strcmp(userInput,"HELP\n") == 0  || strcmp(userInput,"?\n") == 0){
         snprintf(reply,sizeof(reply),"Accepted Commands:\n" 
@@ -38,19 +38,27 @@ void handle_command(char* userInput, int sockfd, struct sockaddr_in client_addre
         snprintf(reply, sizeof(reply), "Program terminating.\n");
         sendto(sockfd, reply, strlen(reply), 0,
            (struct sockaddr*)&client_address, size);
-
-    // Unblock recvfrom and notify main to exit
         if (sockfd >= 0) shutdown(sockfd, SHUT_RDWR);
         raise(SIGINT);                       
+    } else if (strcmp(userInput,"\n") == 0){
+        int sockfd1 = sockfd;
+        struct sockaddr_in c_addr = client_address;
+        socklen_t len = size;
+        handle_command(previous_input,sockfd1,c_addr,len);
+        return;
+    } else if (strcmp(userInput,"Length\n") == 0){
+        int size_history = sampler_getHistorySize();
+        snprintf(reply,sizeof(reply),"Number of samples taken in the last second: %d\n",size_history);
+
     }
-
-
-    
 
 
     int s = sendto(sockfd,reply,strlen(reply),0,(struct sockaddr*)&client_address,size);
 
-    snprintf(previous_input,sizeof(userInput),userInput);
+    if(strcmp(userInput,"\n") == 1){
+        snprintf(previous_input,sizeof(userInput),userInput);
+    }
+    
 
     return;
 

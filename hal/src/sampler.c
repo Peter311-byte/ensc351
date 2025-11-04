@@ -108,7 +108,9 @@ void*sampler(void* arg){
 
     //    } // remove later
             sampler_moveCurrentDataHistory();
+            pthread_mutex_lock(&mutex);
             length_history_arr = i;
+            pthread_mutex_unlock(&mutex);
             i = 0;
             start = time(NULL);
         }else{
@@ -137,6 +139,7 @@ void*sampler(void* arg){
 }
 
 double* sampler_getHistory(int *size){
+    pthread_mutex_lock(&mutex);
     int actualsize = length_history_arr;
     double* copy_history_arr = (double*)calloc(actualsize,sizeof(double)); // need to figure out where to free this!
 
@@ -145,13 +148,17 @@ double* sampler_getHistory(int *size){
     }
 
     *size = length_history_arr;
+    pthread_mutex_unlock(&mutex);
 
     return copy_history_arr;
 
 }
 
 int sampler_getHistorySize(void){
-    return length_history_arr;
+    pthread_mutex_lock(&mutex);
+    int n = length_history_arr;
+    pthread_mutex_unlock(&mutex);
+    return n;
 
 }
 

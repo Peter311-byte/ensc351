@@ -1,1 +1,0 @@
-/usr/bin/aarch64-linux-gnu-gcc -g -Wl,--dependency-file=CMakeFiles/assign2.dir/link.d CMakeFiles/assign2.dir/src/main.c.o -o assign2  ../hal/libhal.a -lgpiod
