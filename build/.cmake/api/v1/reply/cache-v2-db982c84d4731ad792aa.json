@@ -1195,7 +1195,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "-L/usr/lib/aarch64-linux-gnu;-lgpiod"
+			"value" : "-L/usr/lib/x86_64-linux-gnu;-lgpiod"
 		},
 		{
 			"name" : "GPIOD_LDFLAGS_OTHER",
@@ -1219,7 +1219,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/usr/lib/aarch64-linux-gnu"
+			"value" : "/usr/lib/x86_64-linux-gnu"
 		},
 		{
 			"name" : "GPIOD_LIBRARIES",
@@ -1243,7 +1243,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/usr/lib/aarch64-linux-gnu"
+			"value" : "/usr/lib/x86_64-linux-gnu"
 		},
 		{
 			"name" : "GPIOD_LIBS",
@@ -1375,7 +1375,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "-L/usr/lib/aarch64-linux-gnu;-lgpiod"
+			"value" : "-L/usr/lib/x86_64-linux-gnu;-lgpiod"
 		},
 		{
 			"name" : "GPIOD_STATIC_LDFLAGS_OTHER",
@@ -1423,7 +1423,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/usr/lib/aarch64-linux-gnu"
+			"value" : "/usr/lib/x86_64-linux-gnu"
 		},
 		{
 			"name" : "GPIOD_STATIC_LIBS",
@@ -1663,7 +1663,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/usr/lib/aarch64-linux-gnu/libgpiod.so"
+			"value" : "/usr/lib/x86_64-linux-gnu/libgpiod.so"
 		},
 		{
 			"name" : "prefix_result",
@@ -1675,7 +1675,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/usr/lib/aarch64-linux-gnu"
+			"value" : "/usr/lib/x86_64-linux-gnu"
 		}
 	],
 	"kind" : "cache",

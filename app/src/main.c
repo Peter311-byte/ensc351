@@ -4,20 +4,20 @@
 #include <stdatomic.h>
 #include <unistd.h>
 
-#include "sampler.h"        // your sampler_init/cleanup
+#include "sampler.h"        //sampler_init/cleanup
 #include "rotaryencoder.h"  // encoder_init/encoder_stop (libgpiod v2)
 #include "blinker.h"        // Blinker_init/Blinker_stop (software PWM)
 
 static volatile sig_atomic_t stop_flag = 0;
 static void on_sigint(int _){ (void)_; stop_flag = 1; }
 
-int main(int argc, char **argv)
+int main()
 {
     // Defaults that match your board:
-    const char *chip = (argc >= 2) ? argv[1] : "/dev/gpiochip2";
-    unsigned A   = (argc >= 3) ? (unsigned)atoi(argv[2]) : 7;   // GPIO16
-    unsigned B   = (argc >= 4) ? (unsigned)atoi(argv[3]) : 8;   // GPIO17
-    unsigned LED = (argc >= 5) ? (unsigned)atoi(argv[4]) : 16;  // your LED line
+    const char *chip = "/dev/gpiochip2";
+    unsigned A   =  7;   // GPIO16
+    unsigned B   =  8;   // GPIO17
+    unsigned LED = 16;  // your LED line
 
     // Shared blink frequency (Hz), updated by encoder thread
     atomic_int blink_hz;
@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 
     signal(SIGINT, on_sigint);
 
-    // 1) Start light sampler (your existing module)
+    // 1) Start light sampler
     sampler_init();
 
     // 2) Start rotary encoder → updates blink_hz

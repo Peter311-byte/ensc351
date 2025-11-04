@@ -8,6 +8,11 @@ void sampler_cleanup(void);
 
 void sampler_moveCurrentDataHistory(void);
 
+double* sampler_getHistory(int* size);
+
+double sampler_getAverageReading(void);
+
+int sampler_getHistorySize(void);
 
 
 #endif

@@ -21,8 +21,15 @@ uint8_t bits = 8;
 uint32_t speed = 250000;
 
 pthread_t light_sampler;
-
+pthread_mutex_t mutex;
 bool running;
+
+int i = 0;
+
+int length_history_arr = 0;
+
+bool averageIntialized = 0;
+double a = 0.0;
 
 double vref = 3.3000;
 
@@ -71,6 +78,7 @@ int openFile(void){
 }
 
 void sampler_moveCurrentDataHistory(void){
+
     double*temp = history_arr;
     history_arr = current_arr;
     current_arr = temp;
@@ -90,7 +98,6 @@ void sampler_moveCurrentDataHistory(void){
 void*sampler(void* arg){
 
     time_t start = time(NULL);
-    int i = 0;
     while(running == true){
         int ch0 = read_ch(fd, 0, speed);  // ch0 value
         double voltage_R10K = ch0*(vref/4095.0);
@@ -101,6 +108,7 @@ void*sampler(void* arg){
 
     //    } // remove later
             sampler_moveCurrentDataHistory();
+            length_history_arr = i;
             i = 0;
             start = time(NULL);
         }else{
@@ -111,12 +119,45 @@ void*sampler(void* arg){
 
         }
 
+         if(averageIntialized == 0){
+            a = voltage_R10K;
+            averageIntialized = 1;
+            
+        }else{
+            a = a + ((0.001)*(voltage_R10K - a));
+        }
+
+
 
         // printf("Light Intensity (voltage) = %.3f\n", voltage_R10K);
 
         usleep(1000);
         
     }
+}
+
+double* sampler_getHistory(int *size){
+    int actualsize = length_history_arr;
+    double* copy_history_arr = (double*)calloc(actualsize,sizeof(double)); // need to figure out where to free this!
+
+    for(int i = 0; i<actualsize; ++i){
+        copy_history_arr[i] = history_arr[i];
+    }
+
+    *size = length_history_arr;
+
+    return copy_history_arr;
+
+}
+
+int sampler_getHistorySize(void){
+    return length_history_arr;
+
+}
+
+
+double sampler_getAverageReading(void){
+    return a;
 }
 
 void sampler_init(void){
@@ -129,6 +170,7 @@ void sampler_init(void){
     running = true;
     current_arr = (double*)malloc(1000*sizeof(double));
     history_arr = (double*)malloc(1000*sizeof(double));
+    pthread_mutex_init(&mutex,NULL);
     pthread_create(&light_sampler, NULL, sampler, NULL);
 
 }
@@ -137,8 +179,10 @@ void sampler_init(void){
 void sampler_cleanup(void){
     running = false;
     pthread_join(light_sampler, NULL);
+    pthread_mutex_destroy(&mutex);
     free(current_arr);
     free(history_arr);
+    
     close(fd);
     
 }
