@@ -28,12 +28,18 @@ int i = 0;
 
 int length_history_arr = 0;
 
+static int totalSamples = 0;
 bool averageIntialized = 0;
 double a = 0.0;
 
 double vref = 3.3000;
 
+static bool hystersis_check = true;
+
 int fd = 0;
+
+static int dips = 0;
+static int dips_last_second = 0;
 
 double* current_arr;
 double* history_arr;
@@ -79,19 +85,13 @@ int openFile(void){
 
 void sampler_moveCurrentDataHistory(void){
 
+
+    pthread_mutex_lock(&mutex);
     double*temp = history_arr;
     history_arr = current_arr;
     current_arr = temp;
+    pthread_mutex_unlock(&mutex);
     memset(current_arr,0.0,1000*sizeof(current_arr[0]));
-
-    // printf("Updated history_arr!\n");
-
-    //    for (int i=0; i<5; i++){
-
-    //        printf("%.3f", current_arr[i]);
-
-    //    } // remove later
-   
 
 }
 
@@ -101,15 +101,17 @@ void*sampler(void* arg){
     while(running == true){
         int ch0 = read_ch(fd, 0, speed);  // ch0 value
         double voltage_R10K = ch0*(vref/4095.0);
+        pthread_mutex_lock(&mutex);
+        totalSamples += 1;
+        pthread_mutex_unlock(&mutex);
+    
 
         if(difftime(time(NULL),start)>=1.0){
-    //     for (int i=0; i<5; i++){
-    //        printf("%.3f ", current_arr[i]);
-
-    //    } // remove later
             sampler_moveCurrentDataHistory();
             pthread_mutex_lock(&mutex);
             length_history_arr = i;
+            dips_last_second = dips;
+            dips = 0;
             pthread_mutex_unlock(&mutex);
             i = 0;
             start = time(NULL);
@@ -130,6 +132,20 @@ void*sampler(void* arg){
         }
 
 
+        if(((a -voltage_R10K)>=0.1) && (hystersis_check == true)){ // first dip detected
+            dips+=1;
+            hystersis_check = false;
+
+        }
+
+        // every other dip from now we need to check we need to check if the current light level is at least 0.07 below the current average
+
+        if((a-voltage_R10K)<=0.07){
+            hystersis_check = true;
+        }
+
+
+
 
         // printf("Light Intensity (voltage) = %.3f\n", voltage_R10K);
 
@@ -141,7 +157,7 @@ void*sampler(void* arg){
 double* sampler_getHistory(int *size){
     pthread_mutex_lock(&mutex);
     int actualsize = length_history_arr;
-    double* copy_history_arr = (double*)calloc(actualsize,sizeof(double)); // need to figure out where to free this!
+    double* copy_history_arr = (double*)calloc(actualsize,sizeof(double));
 
     for(int i = 0; i<actualsize; ++i){
         copy_history_arr[i] = history_arr[i];
@@ -162,9 +178,22 @@ int sampler_getHistorySize(void){
 
 }
 
+int getTotalNumberofDips(void){
+    pthread_mutex_lock(&mutex);
+    int n = dips_last_second;
+    pthread_mutex_unlock(&mutex);
+    return n;
+}
 
 double sampler_getAverageReading(void){
     return a;
+}
+
+int getTotalNumberofSamples(void){
+    pthread_mutex_lock(&mutex);
+    int n = totalSamples;
+    pthread_mutex_unlock(&mutex);
+    return n;
 }
 
 void sampler_init(void){

@@ -7,6 +7,8 @@
 #include "rotaryencoder.h"  // encoder_init/encoder_stop (libgpiod v2)
 #include "blinker.h"        // Blinker_init/Blinker_stop (software PWM)
 #include "udp.h"
+#include "sampler.h"
+#include "periodTimer.h"
 static volatile sig_atomic_t stop_flag = 0;
 static void on_sigint(int _){ (void)_; stop_flag = 1; }
 
@@ -20,7 +22,7 @@ int main()
 
     // Shared blink frequency (Hz), updated by encoder thread
     atomic_int blink_hz;
-    atomic_init(&blink_hz, 10);  // start at 2 Hz
+    atomic_init(&blink_hz, 10);  // start at 10 Hz
 
     signal(SIGINT, on_sigint);
 
@@ -35,8 +37,6 @@ int main()
 
     udp_init();
 
-    printf("Running: chip=%s  A=%u  B=%u  LED=%u  (Ctrl+C to stop)\n",
-           chip, A, B, LED);
 
     // 4) Main loop: once per second show current blink rate
     while (!stop_flag) {

@@ -14,5 +14,7 @@ double sampler_getAverageReading(void);
 
 int sampler_getHistorySize(void);
 
+int getTotalNumberofSamples(void);
 
+int getTotalNumberofDips(void);
 #endif
