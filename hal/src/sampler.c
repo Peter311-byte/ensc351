@@ -128,7 +128,9 @@ void*sampler(void* arg){
             averageIntialized = 1;
             
         }else{
+            pthread_mutex_lock(&mutex);
             a = a + ((0.001)*(voltage_R10K - a));
+            pthread_mutex_unlock(&mutex);
         }
 
 
@@ -143,11 +145,6 @@ void*sampler(void* arg){
         if((a-voltage_R10K)<=0.07){
             hystersis_check = true;
         }
-
-
-
-
-        // printf("Light Intensity (voltage) = %.3f\n", voltage_R10K);
 
         usleep(1000);
         
@@ -186,7 +183,10 @@ int getTotalNumberofDips(void){
 }
 
 double sampler_getAverageReading(void){
-    return a;
+    pthread_mutex_lock(&mutex);
+    double n = a;
+    pthread_mutex_unlock(&mutex);
+    return n;
 }
 
 int getTotalNumberofSamples(void){
