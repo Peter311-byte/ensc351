@@ -1,0 +1,42 @@
+(gdb) break main
+Breakpoint 1 at 0xaaaaaaaa0998: file noworky.c, line 51.
+(gdb) continue
+Continuing.
+Reading /lib/aarch64-linux-gnu/libc.so.6 from remote target...
+
+Breakpoint 1, main () at noworky.c:51
+warning: Source file is more recent than executable.
+51              printf("noworky: by Brian Fraser\n");
+(gdb) next
+54              source = malloc(sizeof(*source) * NUM_ELEMENTS);
+(gdb) break tradeArrats
+Function "tradeArrats" not defined.
+Make breakpoint pending on future shared library load? (y or [n]) n
+(gdb) break tradeArrays
+Breakpoint 2 at 0xaaaaaaaa08bc: file noworky.c, line 28.
+(gdb) continue
+Continuing.
+
+Breakpoint 2, tradeArrays (array1=0xaaaaaaac16b0, array2=0xaaaaaaac1710, size=10) at noworky.c:28
+28              for (i = size-1; i >= 0; i--) {
+(gdb) print i
+$1 = 10
+(gdb) break swapContent
+Breakpoint 3 at 0xaaaaaaaa0874: file noworky.c, line 17.
+(gdb) continue
+Continuing.
+
+Breakpoint 3, swapContent (d1=0xaaaaaaac16f8, d2=0xaaaaaaac1758) at noworky.c:17
+17              double tmp = *d2;  // error occurs here: it was assigning an pointer to a non-pointer type.
+(gdb) bt
+#0  swapContent (d1=0xaaaaaaac16f8, d2=0xaaaaaaac1758) at noworky.c:17
+#1  0x0000aaaaaaaa08f4 in tradeArrays (array1=0xaaaaaaac16b0, array2=0xaaaaaaac1710, size=10) at noworky.c:29
+#2  0x0000aaaaaaaa0a78 in main () at noworky.c:73
+(gdb) print d1
+$2 = (double *) 0xaaaaaaac16f8
+(gdb) print d2
+$3 = (double *) 0xaaaaaaac1758
+(gdb) Quit
+
+
+// d1 and d2 point to invalid address its because the unsigned int i will always be bigger than 0
