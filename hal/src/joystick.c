@@ -8,7 +8,7 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <linux/spi/spidev.h>
-
+#include <time.h>
 #define max_volume 100
 #define min_volume 0
 
@@ -33,11 +33,68 @@ static int fd;
 /// - Returns raw 12-bit ADC reading (0–4095) or -1 on failure.
 /// ============================================================================
 
+static long long now_ms(void)
+{
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (long long)ts.tv_sec * 1000LL + ts.tv_nsec / 1000000LL;
+}
 
 void * joystick_task(void* arg){
+
+    const long long REPEAT_DELAY_MS = 500;   // delay before auto-repeat starts
+    const long long REPEAT_RATE_MS  = 150;   // repeat every 150 ms when held
+
+        Direction lastY = DIR_CENTER;
+    long long lastStepTime = 0;
+    long long firstPressTime = 0;
+
     while(atomic_load(j_running)){
-        read_direction(fd);
+                read_direction(fd);
+
+        Direction y = j1.y;
+        long long t = now_ms();
+
+        if (y == DIR_CENTER) {
+            // Stick released → reset state
+            lastY = DIR_CENTER;
+            firstPressTime = 0;
+            lastStepTime = 0;
+        } else {
+            // Up or Down is pressed
+            if (y != lastY) {
+                // New press in a different direction → single step immediately
+                int v = AudioMixer_getVolume();
+                if (y == DIR_UP && v <= max_volume - 5) {
+                    AudioMixer_setVolume(v + 5);
+                } else if (y == DIR_DOWN && v >= min_volume + 5) {
+                    AudioMixer_setVolume(v - 5);
+                }
+
+                firstPressTime = t;
+                lastStepTime = t;
+                lastY = y;
+            } else {
+                // Same direction still held → check for auto-repeat
+                if (firstPressTime > 0 &&
+                    t - firstPressTime >= REPEAT_DELAY_MS &&
+                    t - lastStepTime   >= REPEAT_RATE_MS) {
+
+                    int v = AudioMixer_getVolume();
+                    if (y == DIR_UP && v <= max_volume - 5) {
+                        AudioMixer_setVolume(v + 5);
+                    } else if (y == DIR_DOWN && v >= min_volume + 5) {
+                        AudioMixer_setVolume(v - 5);
+                    }
+                    lastStepTime = t;
+                }
+            }
+        }
+
+        usleep(10000);
     }
+
+    return NULL;
 
 }
 void joystick_init(atomic_int * runState){
@@ -144,13 +201,15 @@ int read_direction(int z){
    j1.center = (horiz == DIR_CENTER && vert == DIR_CENTER) ? 1 : 0;
 
 
-   if(j1.y == DIR_UP){
-    AudioMixer_setVolume(AudioMixer_getVolume()+5);
-   }else if (j1.y == DIR_DOWN){
-    AudioMixer_setVolume(AudioMixer_getVolume()-5);
-   }
 
    return 0;
+}
+
+
+void joystick_cleanup(){
+    atomic_store(j_running, 0);
+    pthread_join(joystickTask,NULL);
+    close(fd);
 }
 
 

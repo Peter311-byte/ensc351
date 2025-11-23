@@ -2,8 +2,9 @@ app/CMakeFiles/beatbox.dir/src/main.c.o: \
  /home/prasanna/Ensc351/work/assign3/app/src/main.c \
  /usr/aarch64-linux-gnu/include/stdc-predef.h \
  /home/prasanna/Ensc351/work/assign3/hal/include/audioMIxer.h \
- /home/prasanna/Ensc351/work/assign3/hal/include/rotaryencoder.h \
+ /home/prasanna/Ensc351/work/assign3/hal/include/joystick.h \
  /usr/lib/gcc-cross/aarch64-linux-gnu/14/include/stdatomic.h \
+ /usr/lib/gcc-cross/aarch64-linux-gnu/14/include/stdbool.h \
  /usr/aarch64-linux-gnu/include/stdio.h \
  /usr/aarch64-linux-gnu/include/bits/libc-header-start.h \
  /usr/aarch64-linux-gnu/include/features.h \
@@ -29,18 +30,59 @@ app/CMakeFiles/beatbox.dir/src/main.c.o: \
  /usr/aarch64-linux-gnu/include/bits/stdio_lim.h \
  /usr/aarch64-linux-gnu/include/bits/floatn.h \
  /usr/aarch64-linux-gnu/include/bits/floatn-common.h \
+ /usr/lib/gcc-cross/aarch64-linux-gnu/14/include/stdint.h \
+ /usr/aarch64-linux-gnu/include/stdint.h \
+ /usr/aarch64-linux-gnu/include/bits/wchar.h \
+ /usr/aarch64-linux-gnu/include/bits/stdint-intn.h \
+ /usr/aarch64-linux-gnu/include/bits/stdint-uintn.h \
+ /usr/aarch64-linux-gnu/include/bits/stdint-least.h \
+ /usr/aarch64-linux-gnu/include/unistd.h \
+ /usr/aarch64-linux-gnu/include/bits/posix_opt.h \
+ /usr/aarch64-linux-gnu/include/bits/environments.h \
+ /usr/aarch64-linux-gnu/include/bits/confname.h \
+ /usr/aarch64-linux-gnu/include/bits/getopt_posix.h \
+ /usr/aarch64-linux-gnu/include/bits/getopt_core.h \
+ /usr/aarch64-linux-gnu/include/bits/unistd_ext.h \
+ /usr/aarch64-linux-gnu/include/fcntl.h \
+ /usr/aarch64-linux-gnu/include/bits/fcntl.h \
+ /usr/aarch64-linux-gnu/include/bits/fcntl-linux.h \
+ /usr/aarch64-linux-gnu/include/bits/types/struct_timespec.h \
+ /usr/aarch64-linux-gnu/include/bits/endian.h \
+ /usr/aarch64-linux-gnu/include/bits/endianness.h \
+ /usr/aarch64-linux-gnu/include/bits/types/time_t.h \
+ /usr/aarch64-linux-gnu/include/bits/stat.h \
+ /usr/aarch64-linux-gnu/include/bits/struct_stat.h \
+ /usr/aarch64-linux-gnu/include/sys/ioctl.h \
+ /usr/aarch64-linux-gnu/include/bits/ioctls.h \
+ /usr/aarch64-linux-gnu/include/asm/ioctls.h \
+ /usr/aarch64-linux-gnu/include/asm-generic/ioctls.h \
+ /usr/aarch64-linux-gnu/include/linux/ioctl.h \
+ /usr/aarch64-linux-gnu/include/asm/ioctl.h \
+ /usr/aarch64-linux-gnu/include/asm-generic/ioctl.h \
+ /usr/aarch64-linux-gnu/include/bits/ioctl-types.h \
+ /usr/aarch64-linux-gnu/include/sys/ttydefaults.h \
+ /usr/aarch64-linux-gnu/include/linux/spi/spidev.h \
+ /usr/aarch64-linux-gnu/include/linux/types.h \
+ /usr/aarch64-linux-gnu/include/asm/types.h \
+ /usr/aarch64-linux-gnu/include/asm-generic/types.h \
+ /usr/aarch64-linux-gnu/include/asm-generic/int-ll64.h \
+ /usr/aarch64-linux-gnu/include/asm/bitsperlong.h \
+ /usr/aarch64-linux-gnu/include/asm-generic/bitsperlong.h \
+ /usr/aarch64-linux-gnu/include/linux/posix_types.h \
+ /usr/aarch64-linux-gnu/include/linux/stddef.h \
+ /usr/aarch64-linux-gnu/include/asm/posix_types.h \
+ /usr/aarch64-linux-gnu/include/asm-generic/posix_types.h \
+ /usr/aarch64-linux-gnu/include/linux/spi/spi.h \
+ /usr/aarch64-linux-gnu/include/linux/const.h \
+ /home/prasanna/Ensc351/work/assign3/hal/include/rotaryencoder.h \
  /usr/aarch64-linux-gnu/include/stdlib.h \
  /usr/aarch64-linux-gnu/include/bits/waitflags.h \
  /usr/aarch64-linux-gnu/include/bits/waitstatus.h \
  /usr/aarch64-linux-gnu/include/sys/types.h \
  /usr/aarch64-linux-gnu/include/bits/types/clock_t.h \
  /usr/aarch64-linux-gnu/include/bits/types/clockid_t.h \
- /usr/aarch64-linux-gnu/include/bits/types/time_t.h \
  /usr/aarch64-linux-gnu/include/bits/types/timer_t.h \
- /usr/aarch64-linux-gnu/include/bits/stdint-intn.h \
  /usr/aarch64-linux-gnu/include/endian.h \
- /usr/aarch64-linux-gnu/include/bits/endian.h \
- /usr/aarch64-linux-gnu/include/bits/endianness.h \
  /usr/aarch64-linux-gnu/include/bits/byteswap.h \
  /usr/aarch64-linux-gnu/include/bits/uintn-identity.h \
  /usr/aarch64-linux-gnu/include/sys/select.h \
@@ -48,7 +90,6 @@ app/CMakeFiles/beatbox.dir/src/main.c.o: \
  /usr/aarch64-linux-gnu/include/bits/types/sigset_t.h \
  /usr/aarch64-linux-gnu/include/bits/types/__sigset_t.h \
  /usr/aarch64-linux-gnu/include/bits/types/struct_timeval.h \
- /usr/aarch64-linux-gnu/include/bits/types/struct_timespec.h \
  /usr/aarch64-linux-gnu/include/bits/pthreadtypes.h \
  /usr/aarch64-linux-gnu/include/bits/thread-shared-types.h \
  /usr/aarch64-linux-gnu/include/bits/pthreadtypes-arch.h \
@@ -71,16 +112,6 @@ app/CMakeFiles/beatbox.dir/src/main.c.o: \
  /usr/aarch64-linux-gnu/include/bits/sigaction.h \
  /usr/aarch64-linux-gnu/include/bits/sigcontext.h \
  /usr/aarch64-linux-gnu/include/asm/sigcontext.h \
- /usr/aarch64-linux-gnu/include/linux/types.h \
- /usr/aarch64-linux-gnu/include/asm/types.h \
- /usr/aarch64-linux-gnu/include/asm-generic/types.h \
- /usr/aarch64-linux-gnu/include/asm-generic/int-ll64.h \
- /usr/aarch64-linux-gnu/include/asm/bitsperlong.h \
- /usr/aarch64-linux-gnu/include/asm-generic/bitsperlong.h \
- /usr/aarch64-linux-gnu/include/linux/posix_types.h \
- /usr/aarch64-linux-gnu/include/linux/stddef.h \
- /usr/aarch64-linux-gnu/include/asm/posix_types.h \
- /usr/aarch64-linux-gnu/include/asm-generic/posix_types.h \
  /usr/aarch64-linux-gnu/include/asm/sve_context.h \
  /usr/aarch64-linux-gnu/include/bits/types/stack_t.h \
  /usr/aarch64-linux-gnu/include/sys/ucontext.h \
@@ -97,13 +128,6 @@ app/CMakeFiles/beatbox.dir/src/main.c.o: \
  /usr/aarch64-linux-gnu/include/bits/types/struct_sigstack.h \
  /usr/aarch64-linux-gnu/include/bits/sigthread.h \
  /usr/aarch64-linux-gnu/include/bits/signal_ext.h \
- /usr/aarch64-linux-gnu/include/unistd.h \
- /usr/aarch64-linux-gnu/include/bits/posix_opt.h \
- /usr/aarch64-linux-gnu/include/bits/environments.h \
- /usr/aarch64-linux-gnu/include/bits/confname.h \
- /usr/aarch64-linux-gnu/include/bits/getopt_posix.h \
- /usr/aarch64-linux-gnu/include/bits/getopt_core.h \
- /usr/aarch64-linux-gnu/include/bits/unistd_ext.h \
  /usr/aarch64-linux-gnu/include/pthread.h \
  /usr/aarch64-linux-gnu/include/sched.h \
  /usr/aarch64-linux-gnu/include/bits/sched.h \

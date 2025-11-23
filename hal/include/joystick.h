@@ -45,6 +45,8 @@ typedef enum {
 
 void joystick_init(atomic_int* runState);
 
+void joystick_cleanup();
+
 // Returns true if joystick centered
 bool isCenter(void);
 

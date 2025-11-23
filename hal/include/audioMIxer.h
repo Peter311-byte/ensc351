@@ -20,5 +20,7 @@ void AudioMixer_freeWaveFileData(wavedata_t *pSound);
 void AudioMixer_queueSound(wavedata_t *pSound);
 
 
+int AudioMixer_getVolume();
+
 void AudioMixer_setVolume(int newVolume);
 #endif

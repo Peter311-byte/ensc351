@@ -1,5 +1,6 @@
 
 #include "audioMIxer.h"
+#include "joystick.h"
 #include "rotaryencoder.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -83,6 +84,7 @@ int main(){
     AudioMixer_readWaveFileIntoMemory(hihat,&hiHat);
     AudioMixer_readWaveFileIntoMemory(snare,&Snare);
     AudioMixer_init();
+    joystick_init(&running);
     pthread_create(&beat_generate,NULL,beat_generator,NULL);
 
 
@@ -102,6 +104,7 @@ int main(){
 
     atomic_store(&running,0);
     encoder_stop();
+    joystick_cleanup();
 
    
     
