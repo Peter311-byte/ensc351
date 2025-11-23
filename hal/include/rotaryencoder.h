@@ -3,7 +3,7 @@
 
 #include <stdatomic.h>
 
-void encoder_init(const char* chip, unsigned a_off, unsigned b_off, unsigned c_off, atomic_int *target_bpm, atomic_int* beat_state);
+void encoder_init(const char* chip, unsigned a_off, unsigned b_off, unsigned c_off, atomic_int *target_bpm, atomic_int* beat_state, atomic_int* runState);
 
 void encoder_stop(void);
 

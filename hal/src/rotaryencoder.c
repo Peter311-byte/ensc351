@@ -18,8 +18,8 @@
 #define STEP_BPM 5
 
 static pthread_t th;
-static atomic_int running = 0;
-static struct gpiod_line_request *rq = NULL;
+static atomic_int* e_running = NULL;
+static struct gpiod_line_request *rq  = NULL;
 unsigned offs[3];
 static atomic_int *g_target_BPM = NULL;
 static atomic_int *g_beat_state = NULL;
@@ -46,8 +46,7 @@ void* loop(void*arg){
       { 0,-1,+1, 0, +1, 0, 0,-1, -1, 0, 0,+1, 0,+1,-1, 0 };
 
     int accum = 0;
-    running = 1;
-        while (atomic_load(&running)){
+        while (atomic_load(&e_running)){
         int a = gpiod_line_request_get_value(rq, offs[0]);
         int b = gpiod_line_request_get_value(rq, offs[1]);
         int c = gpiod_line_request_get_value(rq, offs[2]);
@@ -83,10 +82,11 @@ void* loop(void*arg){
 
 }
 
-void encoder_init(const char* chip, unsigned a_off, unsigned b_off, unsigned c_off, atomic_int *target_bpm, atomic_int *beat_state){
+void encoder_init(const char* chip, unsigned a_off, unsigned b_off, unsigned c_off, atomic_int *target_bpm, atomic_int *beat_state, atomic_int*runState){
 
     g_target_BPM = target_bpm;
     g_beat_state = beat_state;
+    e_running = runState;
     struct gpiod_chip *c = gpiod_chip_open(chip);
 
     struct gpiod_line_settings *ls = gpiod_line_settings_new();
@@ -121,7 +121,7 @@ void encoder_init(const char* chip, unsigned a_off, unsigned b_off, unsigned c_o
 
 void encoder_stop(void){
     if (!rq) return;
-    atomic_store(&running, 0);
+    atomic_store(&e_running, 0);
     pthread_join(th, NULL);
     gpiod_line_request_release(rq);
     rq = NULL;
