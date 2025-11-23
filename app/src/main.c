@@ -1,5 +1,6 @@
 
 #include "audioMIxer.h"
+#include "rotaryencoder.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -14,15 +15,16 @@ atomic_int BPM;
 atomic_int state;  // state = 0: rock beat
                    // state = 1: custom beat
                    // state = 2: nothing
+// atomic_int running = 1;
  wavedata_t bassDrum,hiHat,Snare;
    static pthread_t beat_generate;
 
-void beat_generator(void*){
-double halfBeatSec = 60.0 / BPM/ 2.0;
+void* beat_generator(void* arg){
+double halfBeatSec = 60.0 / atomic_load(&BPM)/ 2.0;
 int halfBeatUsec = (int)(halfBeatSec * 1000000.0);
 
 while(1){
-    if(state == 0){
+    if(atomic_load(&state) == 0){
     AudioMixer_queueSound(&bassDrum);
      AudioMixer_queueSound(&hiHat);
      usleep(halfBeatUsec); // change to bpm formula
@@ -44,8 +46,22 @@ while(1){
      AudioMixer_queueSound(&hiHat);
      usleep(halfBeatUsec);
 
+    }else if (atomic_load(&state) == 1){
+        AudioMixer_queueSound(&bassDrum);
+        AudioMixer_queueSound(&hiHat);
+        usleep(halfBeatUsec); // change to bpm formula
+        AudioMixer_queueSound(&hiHat);
+        usleep(halfBeatUsec);
+        AudioMixer_queueSound(&Snare);
+        AudioMixer_queueSound(&hiHat);
+        usleep(halfBeatUsec);
+
+    }else{
+        usleep(1000);
     }
 }
+
+return NULL;
 }
 
 int main(){
@@ -59,14 +75,20 @@ int main(){
 
     atomic_init(&BPM, 100);
     atomic_init(&state,0);
-    encoder_init(chip, A, B, &BPM);
+    encoder_init(chip, A, B, switch_encoder, &BPM, &state);
     AudioMixer_readWaveFileIntoMemory(bass_drum, &bassDrum);
     AudioMixer_readWaveFileIntoMemory(hihat,&hiHat);
     AudioMixer_readWaveFileIntoMemory(snare,&Snare);
     AudioMixer_init();
     pthread_create(&beat_generate,NULL,beat_generator,NULL);
 
-
+    // atomic_store(&running,0);
+    pthread_join(beat_generate,NULL);
+    encoder_stop();
+    AudioMixer_cleanup();
+    AudioMixer_freeWaveFileData(&bassDrum);
+    AudioMixer_freeWaveFileData(&hiHat);
+    AudioMixer_freeWaveFileData(&Snare);
 
 
 

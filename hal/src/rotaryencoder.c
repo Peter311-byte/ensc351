@@ -20,7 +20,9 @@
 static pthread_t th;
 static atomic_int running = 0;
 static struct gpiod_line_request *rq = NULL;
-unsigned offs[2];
+unsigned offs[3];
+static atomic_int *g_target_BPM = NULL;
+static atomic_int *g_beat_state = NULL;
 
 static void sleep_ms(int ms){
     struct timespec ts = {ms/1000, (ms%1000) *1000000L};
@@ -34,11 +36,12 @@ static inline int clamp(int x){
 }
 
 void* loop(void*arg){
-     atomic_int *target_BPM = (atomic_int *)arg;
 
     int A = gpiod_line_request_get_value(rq,offs[0]);
     int B = gpiod_line_request_get_value(rq,offs[1]);
+    int C = gpiod_line_request_get_value(rq,offs[2]);
     int prev = ((A & 1) << 1) | (B & 1);
+    int prev_button = C;
     static const signed char step_map[16] =
       { 0,-1,+1, 0, +1, 0, 0,-1, -1, 0, 0,+1, 0,+1,-1, 0 };
 
@@ -47,6 +50,7 @@ void* loop(void*arg){
         while (atomic_load(&running)){
         int a = gpiod_line_request_get_value(rq, offs[0]);
         int b = gpiod_line_request_get_value(rq, offs[1]);
+        int c = gpiod_line_request_get_value(rq, offs[2]);
         if (a < 0 || b < 0) break;
 
         int curr = ((a & 1) << 1) | (b & 1);
@@ -54,23 +58,35 @@ void* loop(void*arg){
         if (delta){
             accum += delta;             // ±5 per half-step
             if (accum >= +4){           // one detent CW
-                int v = atomic_load(target_BPM) + STEP_BPM;
-                atomic_store(target_BPM, clamp(v));
+                int v = atomic_load(g_target_BPM) + STEP_BPM;
+                atomic_store(g_target_BPM, clamp(v));
                 accum = 0;
             } else if (accum <= -4){    // one detent CCW
-                int v = atomic_load(target_BPM) - STEP_BPM;
-                atomic_store(target_BPM, clamp(v));
+                int v = atomic_load(g_target_BPM) - STEP_BPM;
+                atomic_store(g_target_BPM, clamp(v));
                 accum = 0;
             }
         }
         prev = curr;
+
+        if(prev_button == 1 && c == 0){
+            int s = atomic_load(g_beat_state);
+            s = (s+1)%3;
+            atomic_store(g_beat_state,s);
+        }
+
+        prev_button = c;
+
         sleep_ms(1);
     }
     return NULL;
 
 }
 
-void encoder_init(const char* chip, unsigned a_off, unsigned b_off, atomic_int *target_hz){
+void encoder_init(const char* chip, unsigned a_off, unsigned b_off, unsigned c_off, atomic_int *target_bpm, atomic_int *beat_state){
+
+    g_target_BPM = target_bpm;
+    g_beat_state = beat_state;
     struct gpiod_chip *c = gpiod_chip_open(chip);
 
     struct gpiod_line_settings *ls = gpiod_line_settings_new();
@@ -80,7 +96,8 @@ void encoder_init(const char* chip, unsigned a_off, unsigned b_off, atomic_int *
     struct gpiod_line_config *lc = gpiod_line_config_new();
     offs[0] = a_off;
     offs[1] = b_off;
-    gpiod_line_config_add_line_settings(lc, offs, 2, ls);
+    offs[2] = c_off;
+    gpiod_line_config_add_line_settings(lc, offs, 3, ls);
 
     struct gpiod_request_config *rc = gpiod_request_config_new();
     gpiod_request_config_set_consumer(rc, "encoder");
@@ -94,7 +111,7 @@ void encoder_init(const char* chip, unsigned a_off, unsigned b_off, atomic_int *
     gpiod_line_config_free(lc);
     gpiod_line_settings_free(ls);
 
-    pthread_create(&th, NULL, loop, target_hz);
+    pthread_create(&th, NULL, loop, NULL);
 
     
 

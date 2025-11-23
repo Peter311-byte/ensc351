@@ -1,0 +1,1 @@
+/usr/bin/aarch64-linux-gnu-gcc -g -Wl,--dependency-file=CMakeFiles/beatbox.dir/link.d CMakeFiles/beatbox.dir/src/main.c.o -o beatbox  ../hal/libhal.a -lasound -lgpiod
