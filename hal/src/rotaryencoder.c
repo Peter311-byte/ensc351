@@ -121,7 +121,7 @@ void encoder_init(const char* chip, unsigned a_off, unsigned b_off, unsigned c_o
 
 void encoder_stop(void){
     if (!rq) return;
-    atomic_store(&e_running, 0);
+    atomic_store(e_running, 0);
     pthread_join(th, NULL);
     gpiod_line_request_release(rq);
     rq = NULL;

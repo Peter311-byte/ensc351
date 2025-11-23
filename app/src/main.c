@@ -15,18 +15,19 @@ atomic_int BPM;
 atomic_int state;  // state = 0: rock beat
                    // state = 1: custom beat
                    // state = 2: nothing
-atomic_int app_running = 1;
-atomic_int running = 1;
+atomic_int app_running;
+atomic_int running;
  wavedata_t bassDrum,hiHat,Snare;
    static pthread_t beat_generate;
 
 void* beat_generator(void* arg){
-double halfBeatSec = 60.0 / atomic_load(&BPM)/ 2.0;
-int halfBeatUsec = (int)(halfBeatSec * 1000000.0);
 
-while(1){
+
+while(atomic_load(&app_running)){
+
+    double halfBeatSec = 60.0 / atomic_load(&BPM)/ 2.0;
+    int halfBeatUsec = (int)(halfBeatSec * 1000000.0);
     if(atomic_load(&state) == 0){
-    printf("%d", atomic_load(&BPM));
     AudioMixer_queueSound(&bassDrum);
      AudioMixer_queueSound(&hiHat);
      usleep(halfBeatUsec); // change to bpm formula
@@ -49,7 +50,6 @@ while(1){
      usleep(halfBeatUsec);
 
     }else if (atomic_load(&state) == 1){
-        printf("%d", atomic_load(&BPM));
         AudioMixer_queueSound(&bassDrum);
         usleep(halfBeatUsec); // change to bpm formul
 
@@ -73,7 +73,8 @@ int main(){
     unsigned switch_encoder = 16;   // switch_encoder gpio
     atomic_init(&BPM, 100);
     atomic_init(&state,0);
-
+    atomic_init(&running,1);
+    atomic_init(&app_running, 1);
 
 
 
@@ -89,9 +90,15 @@ int main(){
         sleep(1);
     }
 
-    atomic_store(&running,0);
+
+    atomic_store(&app_running, 0);
     pthread_join(beat_generate,NULL);
+
+    atomic_store(&running,0);
     encoder_stop();
+
+   
+    
     AudioMixer_cleanup();
     AudioMixer_freeWaveFileData(&bassDrum);
     AudioMixer_freeWaveFileData(&hiHat);
