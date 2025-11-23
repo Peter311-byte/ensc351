@@ -13,8 +13,8 @@
 #include <gpiod.h>
 #include "rotaryencoder.h"
 
-#define MIN_BPM 60
-#define MAX_BPM 200
+#define MIN_BPM 40
+#define MAX_BPM 300
 #define STEP_BPM 5
 
 static pthread_t th;
@@ -46,7 +46,7 @@ void* loop(void*arg){
       { 0,-1,+1, 0, +1, 0, 0,-1, -1, 0, 0,+1, 0,+1,-1, 0 };
 
     int accum = 0;
-        while (atomic_load(&e_running)){
+        while (atomic_load(e_running)){
         int a = gpiod_line_request_get_value(rq, offs[0]);
         int b = gpiod_line_request_get_value(rq, offs[1]);
         int c = gpiod_line_request_get_value(rq, offs[2]);

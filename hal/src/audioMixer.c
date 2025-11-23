@@ -63,7 +63,7 @@ void AudioMixer_init(void)
 
 
 	// Open the PCM output
-	int err = snd_pcm_open(&handle, "default", SND_PCM_STREAM_PLAYBACK, 0);
+	int err = snd_pcm_open(&handle, "plughw:1", SND_PCM_STREAM_PLAYBACK, 0);
 	if (err < 0) {
 		printf("Playback open error: %s\n", snd_strerror(err));
 		exit(EXIT_FAILURE);

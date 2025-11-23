@@ -71,7 +71,7 @@ int main(){
     unsigned A   =  7;   // GPIO16
     unsigned B   =  8;   // GPIO17
     unsigned switch_encoder = 16;   // switch_encoder gpio
-    atomic_init(&BPM, 100);
+    atomic_init(&BPM, 120);
     atomic_init(&state,0);
     atomic_init(&running,1);
     atomic_init(&app_running, 1);
@@ -94,15 +94,18 @@ int main(){
     atomic_store(&app_running, 0);
     pthread_join(beat_generate,NULL);
 
+
+    AudioMixer_cleanup();
+    AudioMixer_freeWaveFileData(&bassDrum);
+    AudioMixer_freeWaveFileData(&hiHat);
+    AudioMixer_freeWaveFileData(&Snare);
+
     atomic_store(&running,0);
     encoder_stop();
 
    
     
-    AudioMixer_cleanup();
-    AudioMixer_freeWaveFileData(&bassDrum);
-    AudioMixer_freeWaveFileData(&hiHat);
-    AudioMixer_freeWaveFileData(&Snare);
+
 
     return 0;
 
