@@ -1,6 +1,7 @@
 
 #include "audioMIxer.h"
 #include "joystick.h"
+#include "accelerometer.h"
 #include "rotaryencoder.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,7 +32,7 @@ while(atomic_load(&app_running)){
     if(atomic_load(&state) == 0){
     AudioMixer_queueSound(&bassDrum);
      AudioMixer_queueSound(&hiHat);
-     usleep(halfBeatUsec); // change to bpm formula
+     usleep(halfBeatUsec);
     AudioMixer_queueSound(&hiHat);
     usleep(halfBeatUsec);
     AudioMixer_queueSound(&Snare);
@@ -51,8 +52,27 @@ while(atomic_load(&app_running)){
      usleep(halfBeatUsec);
 
     }else if (atomic_load(&state) == 1){
-        AudioMixer_queueSound(&bassDrum);
-        usleep(halfBeatUsec); // change to bpm formul
+    AudioMixer_queueSound(&bassDrum);
+    AudioMixer_queueSound(&hiHat);
+    usleep(halfBeatUsec);
+    AudioMixer_queueSound(&hiHat);
+    usleep(halfBeatUsec);
+    AudioMixer_queueSound(&Snare);
+    AudioMixer_queueSound(&hiHat);
+    usleep(halfBeatUsec);
+    AudioMixer_queueSound(&hiHat);
+    usleep(halfBeatUsec);
+    AudioMixer_queueSound(&bassDrum);
+    AudioMixer_queueSound(&hiHat);
+    usleep(halfBeatUsec);
+    AudioMixer_queueSound(&bassDrum);
+    AudioMixer_queueSound(&hiHat);
+    usleep(halfBeatUsec);
+    AudioMixer_queueSound(&Snare);
+    AudioMixer_queueSound(&hiHat);
+    usleep(halfBeatUsec);
+    AudioMixer_queueSound(&hiHat);
+    usleep(halfBeatUsec);
 
     }else{
         usleep(1000);
@@ -86,6 +106,7 @@ int main(){
     AudioMixer_init();
     joystick_init(&running);
     pthread_create(&beat_generate,NULL,beat_generator,NULL);
+    accelometer_init(&running, &bassDrum, &Snare, &hiHat);
 
 
     while(atomic_load(&app_running)){
@@ -105,6 +126,8 @@ int main(){
     atomic_store(&running,0);
     encoder_stop();
     joystick_cleanup();
+    accelometer_stop();
+
 
    
     
