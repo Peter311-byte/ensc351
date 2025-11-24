@@ -1,0 +1,2 @@
+/usr/bin/aarch64-linux-gnu-ar qc libhal.a CMakeFiles/hal.dir/src/accelerometer.c.o CMakeFiles/hal.dir/src/audioMixer.c.o CMakeFiles/hal.dir/src/joystick.c.o CMakeFiles/hal.dir/src/periodTimer.c.o CMakeFiles/hal.dir/src/rotaryencoder.c.o CMakeFiles/hal.dir/src/udp.c.o
+/usr/bin/aarch64-linux-gnu-ranlib libhal.a

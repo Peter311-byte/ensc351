@@ -1,8 +1,10 @@
-
 #include "audioMIxer.h"
 #include "joystick.h"
 #include "accelerometer.h"
 #include "rotaryencoder.h"
+#include "periodTimer.h"
+#include "udp.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -10,132 +12,220 @@
 #include <unistd.h>
 #include <pthread.h>
 
-#define bass_drum "wave-files/100051__menegass__gui-drum-bd-hard.wav"
-#define hihat "wave-files/100053__menegass__gui-drum-cc.wav"
-#define snare "wave-files/100059__menegass__gui-drum-snare-soft.wav"
-atomic_int BPM;
-atomic_int state;  // state = 0: rock beat
-                   // state = 1: custom beat
-                   // state = 2: nothing
-atomic_int app_running;
-atomic_int running;
- wavedata_t bassDrum,hiHat,Snare;
-   static pthread_t beat_generate;
+#define BASS_DRUM_FILE "wave-files/100051__menegass__gui-drum-bd-hard.wav"
+#define HIHAT_FILE     "wave-files/100053__menegass__gui-drum-cc.wav"
+#define SNARE_FILE     "wave-files/100059__menegass__gui-drum-snare-soft.wav"
 
-void* beat_generator(void* arg){
+#define UDP_PORT 12345      // choose any port; match it in your Node server
 
+// Global shared state
+atomic_int BPM;          // tempo
+atomic_int state;        // 0 = rock, 1 = custom, 2 = none
+atomic_int app_running;  // controls whole app lifetime
+atomic_int running;      // controls input threads (joystick/encoder/accel)
 
-while(atomic_load(&app_running)){
+wavedata_t bassDrum, hiHat, Snare;
 
-    double halfBeatSec = 60.0 / atomic_load(&BPM)/ 2.0;
-    int halfBeatUsec = (int)(halfBeatSec * 1000000.0);
-    if(atomic_load(&state) == 0){
-    AudioMixer_queueSound(&bassDrum);
-     AudioMixer_queueSound(&hiHat);
-     usleep(halfBeatUsec);
-    AudioMixer_queueSound(&hiHat);
-    usleep(halfBeatUsec);
-    AudioMixer_queueSound(&Snare);
-     AudioMixer_queueSound(&hiHat);
-     usleep(halfBeatUsec);
-     AudioMixer_queueSound(&hiHat);
-     usleep(halfBeatUsec);
-     AudioMixer_queueSound(&bassDrum);
-     AudioMixer_queueSound(&hiHat);
-     usleep(halfBeatUsec);
-     AudioMixer_queueSound(&hiHat);
-     usleep(halfBeatUsec);
-      AudioMixer_queueSound(&Snare);
-     AudioMixer_queueSound(&hiHat);
-     usleep(halfBeatUsec);
-     AudioMixer_queueSound(&hiHat);
-     usleep(halfBeatUsec);
+// Threads
+static pthread_t beat_generate;
+static pthread_t displayThread;
 
-    }else if (atomic_load(&state) == 1){
-    AudioMixer_queueSound(&bassDrum);
-    AudioMixer_queueSound(&hiHat);
-    usleep(halfBeatUsec);
-    AudioMixer_queueSound(&hiHat);
-    usleep(halfBeatUsec);
-    AudioMixer_queueSound(&Snare);
-    AudioMixer_queueSound(&hiHat);
-    usleep(halfBeatUsec);
-    AudioMixer_queueSound(&hiHat);
-    usleep(halfBeatUsec);
-    AudioMixer_queueSound(&bassDrum);
-    AudioMixer_queueSound(&hiHat);
-    usleep(halfBeatUsec);
-    AudioMixer_queueSound(&bassDrum);
-    AudioMixer_queueSound(&hiHat);
-    usleep(halfBeatUsec);
-    AudioMixer_queueSound(&Snare);
-    AudioMixer_queueSound(&hiHat);
-    usleep(halfBeatUsec);
-    AudioMixer_queueSound(&hiHat);
-    usleep(halfBeatUsec);
+// ---------- Beat Generator Thread ----------
 
-    }else{
-        usleep(1000);
+static void* beat_generator(void* arg)
+{
+    (void)arg;
+
+    while (atomic_load(&app_running)) {
+        int bpm = atomic_load(&BPM);
+        if (bpm < 40) bpm = 40;      // clamp just in case
+        if (bpm > 300) bpm = 300;
+
+        double halfBeatSec = 60.0 / bpm / 2.0;
+        int halfBeatUsec = (int)(halfBeatSec * 1000000.0);
+
+        int mode = atomic_load(&state);
+
+        if (mode == 0) {
+            // Standard rock beat (1–4.5)
+            AudioMixer_queueSound(&bassDrum);  // 1: bass + hihat
+            AudioMixer_queueSound(&hiHat);
+            usleep(halfBeatUsec);
+
+            AudioMixer_queueSound(&hiHat);     // 1.5
+            usleep(halfBeatUsec);
+
+            AudioMixer_queueSound(&Snare);     // 2: snare + hihat
+            AudioMixer_queueSound(&hiHat);
+            usleep(halfBeatUsec);
+
+            AudioMixer_queueSound(&hiHat);     // 2.5
+            usleep(halfBeatUsec);
+
+            AudioMixer_queueSound(&bassDrum);  // 3: bass + hihat
+            AudioMixer_queueSound(&hiHat);
+            usleep(halfBeatUsec);
+
+            AudioMixer_queueSound(&hiHat);     // 3.5
+            usleep(halfBeatUsec);
+
+            AudioMixer_queueSound(&Snare);     // 4: snare + hihat
+            AudioMixer_queueSound(&hiHat);
+            usleep(halfBeatUsec);
+
+            AudioMixer_queueSound(&hiHat);     // 4.5
+            usleep(halfBeatUsec);
+
+        } else if (mode == 1) {
+            // Your custom beat – currently variation of rock
+            AudioMixer_queueSound(&bassDrum);
+            AudioMixer_queueSound(&hiHat);
+            usleep(halfBeatUsec);
+
+            AudioMixer_queueSound(&hiHat);
+            usleep(halfBeatUsec);
+
+            AudioMixer_queueSound(&Snare);
+            AudioMixer_queueSound(&hiHat);
+            usleep(halfBeatUsec);
+
+            AudioMixer_queueSound(&hiHat);
+            usleep(halfBeatUsec);
+
+            AudioMixer_queueSound(&bassDrum);
+            AudioMixer_queueSound(&hiHat);
+            usleep(halfBeatUsec);
+
+            AudioMixer_queueSound(&bassDrum);
+            AudioMixer_queueSound(&hiHat);
+            usleep(halfBeatUsec);
+
+            AudioMixer_queueSound(&Snare);
+            AudioMixer_queueSound(&hiHat);
+            usleep(halfBeatUsec);
+
+            AudioMixer_queueSound(&hiHat);
+            usleep(halfBeatUsec);
+
+        } else {
+            // mode 2 = none (off)
+            usleep(1000);
+        }
     }
+
+    return NULL;
 }
 
-return NULL;
+// ---------- Display Thread (Section 4.3 text output) ----------
+
+static void* display_thread(void* arg)
+{
+    (void)arg;
+
+    Period_statistics_t audioStats;
+    Period_statistics_t accelStats;
+
+    while (atomic_load(&app_running)) {
+        sleep(1);   // once per second
+
+        int mode = atomic_load(&state);   // M0, M1, ...
+        int tempo = atomic_load(&BPM);    // bpm
+        int volume = AudioMixer_getVolume();
+
+        Period_getStatisticsAndClear(PERIOD_EVENT_AUDIO_REFILL, &audioStats);
+        Period_getStatisticsAndClear(PERIOD_EVENT_ACCEL_SAMPLE, &accelStats);
+
+        printf("M%d %dbpm vol:%d "
+               "Audio[%.3f, %.3f] avg %.3f/%d "
+               "Accel[%.3f, %.3f] avg %.3f/%d\n",
+               mode, tempo, volume,
+               audioStats.minPeriodInMs,
+               audioStats.maxPeriodInMs,
+               audioStats.avgPeriodInMs,
+               audioStats.numSamples,
+               accelStats.minPeriodInMs,
+               accelStats.maxPeriodInMs,
+               accelStats.avgPeriodInMs,
+               accelStats.numSamples);
+        fflush(stdout);
+    }
+    return NULL;
 }
 
-void handle_sigint(int sig){
+// ---------- Signal handler ----------
+
+static void handle_sigint(int sig)
+{
     (void)sig;
-    atomic_store(&app_running,0);
+    atomic_store(&app_running, 0);
 }
-int main(){
-    signal(SIGINT,handle_sigint);
-    const char *chip = "/dev/gpiochip2";
-    unsigned A   =  7;   // GPIO16
-    unsigned B   =  8;   // GPIO17
-    unsigned switch_encoder = 16;   // switch_encoder gpio
+
+// ---------- main() ----------
+
+int main(void)
+{
+    signal(SIGINT, handle_sigint);
+
+    // Period timer for stats
+    Period_init();
+
+    // Shared state init
     atomic_init(&BPM, 120);
-    atomic_init(&state,0);
-    atomic_init(&running,1);
-    atomic_init(&app_running, 1);
+    atomic_init(&state, 0);         // start in rock mode
+    atomic_init(&running, 1);       // input threads running
+    atomic_init(&app_running, 1);   // whole app running
 
-
-
-    encoder_init(chip, A, B, switch_encoder, &BPM, &state, &running);
-    AudioMixer_readWaveFileIntoMemory(bass_drum, &bassDrum);
-    AudioMixer_readWaveFileIntoMemory(hihat,&hiHat);
-    AudioMixer_readWaveFileIntoMemory(snare,&Snare);
+    // Audio + wave files
+    AudioMixer_readWaveFileIntoMemory(BASS_DRUM_FILE, &bassDrum);
+    AudioMixer_readWaveFileIntoMemory(HIHAT_FILE,     &hiHat);
+    AudioMixer_readWaveFileIntoMemory(SNARE_FILE,     &Snare);
     AudioMixer_init();
+
+    // GPIO / rotary encoder
+    const char *chip = "/dev/gpiochip2";
+    unsigned A   = 7;   // GPIO16
+    unsigned B   = 8;   // GPIO17
+    unsigned switch_encoder = 16;
+    encoder_init(chip, A, B, switch_encoder, &BPM, &state, &running);
+
+    // Joystick (ADC) + accelerometer
     joystick_init(&running);
-    pthread_create(&beat_generate,NULL,beat_generator,NULL);
     accelometer_init(&running, &bassDrum, &Snare, &hiHat);
 
+    // UDP: attach shared state and start server
+    udp_set_app_running(&app_running);
+    udp_set_sounds(&bassDrum, &Snare, &hiHat);
+    udp_set_tempo(&BPM, atomic_load(&BPM));
+    udp_set_mode(&state, atomic_load(&state));
+    udp_init(UDP_PORT);
 
-    while(atomic_load(&app_running)){
+    // Threads: beat + display
+    pthread_create(&beat_generate, NULL, beat_generator, NULL);
+    pthread_create(&displayThread, NULL, display_thread, NULL);
+
+    // Main thread just waits until app_running becomes 0
+    while (atomic_load(&app_running)) {
         sleep(1);
     }
 
+    // Begin shutdown
+    atomic_store(&running, 0);   // stop joystick / encoder / accel threads
 
-    atomic_store(&app_running, 0);
-    pthread_join(beat_generate,NULL);
+    pthread_join(beat_generate, NULL);
+    pthread_join(displayThread, NULL);
 
+    udp_cleanup();
+
+    accelometer_stop();
+    joystick_cleanup();
+    encoder_stop();
 
     AudioMixer_cleanup();
     AudioMixer_freeWaveFileData(&bassDrum);
     AudioMixer_freeWaveFileData(&hiHat);
     AudioMixer_freeWaveFileData(&Snare);
 
-    atomic_store(&running,0);
-    encoder_stop();
-    joystick_cleanup();
-    accelometer_stop();
-
-
-   
-    
-
+    Period_cleanup();
 
     return 0;
-
-
-
-
 }
