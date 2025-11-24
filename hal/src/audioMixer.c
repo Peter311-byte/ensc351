@@ -1,4 +1,5 @@
 #include "audioMIxer.h"
+#include "periodTimer.h"
 #include <stdio.h>      // for printf, fprintf
 #include <stdlib.h>     // for malloc, free, exit
 #include <assert.h>     // for assert()
@@ -377,6 +378,7 @@ void* playbackThread(void* _arg)
 {
 	
 	while (!stopping) {
+		Period_markEvent(PERIOD_EVENT_AUDIO_REFILL);
 		// Generate next block of audio
 		fillPlaybackBuffer(playbackBuffer, playbackBufferSize);
 

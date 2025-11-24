@@ -4,6 +4,7 @@ hal/CMakeFiles/hal.dir/src/accelerometer.c.o: \
  /home/prasanna/Ensc351/work/assign3/hal/include/accelerometer.h \
  /home/prasanna/Ensc351/work/assign3/hal/include/audioMIxer.h \
  /usr/lib/gcc-cross/aarch64-linux-gnu/14/include/stdatomic.h \
+ /home/prasanna/Ensc351/work/assign3/hal/include/periodTimer.h \
  /usr/aarch64-linux-gnu/include/stdio.h \
  /usr/aarch64-linux-gnu/include/bits/libc-header-start.h \
  /usr/aarch64-linux-gnu/include/features.h \

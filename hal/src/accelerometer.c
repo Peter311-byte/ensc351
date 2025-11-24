@@ -1,4 +1,5 @@
 #include "accelerometer.h"
+#include "periodTimer.h"
 #include <stdatomic.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -101,6 +102,7 @@ static void *accel_thread_func(void *arg)
     long long lastHitX = 0, lastHitY = 0, lastHitZ = 0;
 
     while (atomic_load(accel_runFlag)) {
+        Period_markEvent(PERIOD_EVENT_ACCEL_SAMPLE);
         int raw_x = accel_read_adc_ch(ACCEL_CH_X, speed);
         int raw_y = accel_read_adc_ch(ACCEL_CH_Y, speed);
         int raw_z = accel_read_adc_ch(ACCEL_CH_Z, speed);

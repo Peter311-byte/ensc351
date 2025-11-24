@@ -29,6 +29,7 @@ wavedata_t bassDrum, hiHat, Snare;
 // Threads
 static pthread_t beat_generate;
 static pthread_t displayThread;
+static volatile sig_atomic_t sigint_flag = 0;
 
 // ---------- Beat Generator Thread ----------
 
@@ -77,35 +78,23 @@ static void* beat_generator(void* arg)
             usleep(halfBeatUsec);
 
         } else if (mode == 1) {
-            // Your custom beat – currently variation of rock
-            AudioMixer_queueSound(&bassDrum);
-            AudioMixer_queueSound(&hiHat);
-            usleep(halfBeatUsec);
-
-            AudioMixer_queueSound(&hiHat);
-            usleep(halfBeatUsec);
-
-            AudioMixer_queueSound(&Snare);
-            AudioMixer_queueSound(&hiHat);
-            usleep(halfBeatUsec);
-
-            AudioMixer_queueSound(&hiHat);
-            usleep(halfBeatUsec);
-
-            AudioMixer_queueSound(&bassDrum);
-            AudioMixer_queueSound(&hiHat);
-            usleep(halfBeatUsec);
-
-            AudioMixer_queueSound(&bassDrum);
-            AudioMixer_queueSound(&hiHat);
-            usleep(halfBeatUsec);
-
-            AudioMixer_queueSound(&Snare);
-            AudioMixer_queueSound(&hiHat);
-            usleep(halfBeatUsec);
-
-            AudioMixer_queueSound(&hiHat);
-            usleep(halfBeatUsec);
+            
+    AudioMixer_queueSound(&bassDrum);
+    AudioMixer_queueSound(&hiHat);
+    usleep(halfBeatUsec);
+    usleep(halfBeatUsec);
+    AudioMixer_queueSound(&hiHat);
+    usleep(halfBeatUsec);
+    usleep(halfBeatUsec);
+    AudioMixer_queueSound(&Snare);
+    AudioMixer_queueSound(&hiHat);
+    usleep(halfBeatUsec);
+    AudioMixer_queueSound(&bassDrum);
+    usleep(halfBeatUsec);
+    AudioMixer_queueSound(&bassDrum);
+    AudioMixer_queueSound(&hiHat);
+    usleep(halfBeatUsec);
+    usleep(halfBeatUsec);
 
         } else {
             // mode 2 = none (off)
@@ -157,13 +146,15 @@ static void* display_thread(void* arg)
 static void handle_sigint(int sig)
 {
     (void)sig;
-    atomic_store(&app_running, 0);
+    sigint_flag = 1;
 }
 
 // ---------- main() ----------
 
 int main(void)
 {
+
+    printf("Welcome to BeatBox simulator. You can exit through the UDP connection. Note: Pressing Ctrl C will not work.\n");
     signal(SIGINT, handle_sigint);
 
     // Period timer for stats
@@ -204,7 +195,15 @@ int main(void)
     pthread_create(&displayThread, NULL, display_thread, NULL);
 
     // Main thread just waits until app_running becomes 0
-    while (atomic_load(&app_running)) {
+    while (1) {
+        if(sigint_flag){
+            atomic_store(&app_running,0);
+            break;
+        }
+
+        if(!atomic_load(&app_running)){
+            break;
+        }
         sleep(1);
     }
 

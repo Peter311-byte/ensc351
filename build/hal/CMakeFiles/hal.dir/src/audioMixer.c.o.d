@@ -2,6 +2,7 @@ hal/CMakeFiles/hal.dir/src/audioMixer.c.o: \
  /home/prasanna/Ensc351/work/assign3/hal/src/audioMixer.c \
  /usr/aarch64-linux-gnu/include/stdc-predef.h \
  /home/prasanna/Ensc351/work/assign3/hal/include/audioMIxer.h \
+ /home/prasanna/Ensc351/work/assign3/hal/include/periodTimer.h \
  /usr/aarch64-linux-gnu/include/stdio.h \
  /usr/aarch64-linux-gnu/include/bits/libc-header-start.h \
  /usr/aarch64-linux-gnu/include/features.h \
